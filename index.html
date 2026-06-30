@@ -1056,6 +1056,552 @@
   .help-note a { color: var(--purple-light); text-decoration: none; font-weight: 600; }
   .help-note a:hover { text-decoration: underline; }
 
+  /* ============================================================
+     NAV SOCIAL BUTTONS
+     ============================================================ */
+  .nav-social-zone { display:flex;align-items:center;gap:0.35rem; }
+  .nav-icon-btn {
+    position: relative;
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .nav-icon-btn:hover { background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.35);color:var(--purple-light); }
+  .nav-icon-btn svg { width:16px;height:16px; }
+  .nav-icon-btn .badge-dot {
+    position: absolute;
+    top: 5px; right: 5px;
+    width: 8px; height: 8px;
+    background: #F87171;
+    border-radius: 50%;
+    border: 1.5px solid var(--bg);
+    display: none;
+  }
+  .nav-icon-btn .badge-dot.visible { display:block; }
+  .nav-icon-btn .badge-count {
+    position: absolute;
+    top: -4px; right: -4px;
+    min-width: 16px; height: 16px;
+    background: var(--purple);
+    border-radius: 999px;
+    border: 1.5px solid var(--bg);
+    font-size: 0.55rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: #fff;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+  }
+  .nav-icon-btn .badge-count.visible { display:flex; }
+
+  /* ============================================================
+     NOTIFICATIONS PANEL
+     ============================================================ */
+  .notif-panel {
+    position: fixed;
+    top: 70px; right: 1rem;
+    width: 360px;
+    background: #0d0d14;
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 14px;
+    z-index: 8000;
+    opacity: 0; visibility: hidden;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    max-height: 480px;
+    display: flex; flex-direction: column;
+  }
+  body.theme-light .notif-panel { background: #fff; }
+  .notif-panel.open { opacity:1;visibility:visible;transform:translateY(0) scale(1); }
+  .notif-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .notif-panel-title { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;color:var(--text); }
+  .notif-panel-clear { background:none;border:none;font-size:0.72rem;color:var(--text-muted);cursor:none;font-family:'Inter',sans-serif;transition:color 0.2s; }
+  .notif-panel-clear:hover { color:var(--purple-light); }
+  .notif-list { flex:1;overflow-y:auto;padding:0.5rem;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,0.3) transparent; }
+  .notif-item {
+    display: flex; align-items: flex-start; gap: 0.65rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 10px;
+    cursor: none;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .notif-item:hover { background: rgba(255,255,255,0.04); }
+  .notif-item.unread::before { content:'';position:absolute;left:6px;top:50%;transform:translateY(-50%);width:5px;height:5px;border-radius:50%;background:var(--purple-light); }
+  .notif-icon { width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;border:1px solid var(--border); }
+  .notif-icon.ni-like { background:rgba(16,185,129,0.1); }
+  .notif-icon.ni-script { background:rgba(124,58,237,0.1); }
+  .notif-icon.ni-msg { background:rgba(6,182,212,0.1); }
+  .notif-icon.ni-fr { background:rgba(245,158,11,0.1); }
+  .notif-icon.ni-vote { background:rgba(167,139,250,0.1); }
+  .notif-body { flex:1;min-width:0; }
+  .notif-text { font-size:0.8rem;color:var(--text);line-height:1.4; }
+  .notif-text strong { color:var(--purple-light); }
+  .notif-time { font-size:0.68rem;color:var(--text-muted);margin-top:0.2rem; }
+  .notif-actions { display:flex;gap:0.35rem;margin-top:0.45rem; }
+  .notif-action-btn { padding:0.25rem 0.6rem;border-radius:5px;font-size:0.7rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;border:1px solid;transition:all 0.15s; }
+  .notif-action-btn.accept { background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.35);color:#34D399; }
+  .notif-action-btn.accept:hover { background:rgba(16,185,129,0.22); }
+  .notif-action-btn.decline { background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.25);color:#F87171; }
+  .notif-action-btn.decline:hover { background:rgba(239,68,68,0.18); }
+  .notif-empty { text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:0.82rem; }
+
+  /* ============================================================
+     FRIENDS PANEL
+     ============================================================ */
+  .friends-panel {
+    position: fixed;
+    top: 70px; right: 1rem;
+    width: 340px;
+    background: #0d0d14;
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 14px;
+    z-index: 8000;
+    opacity: 0; visibility: hidden;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    max-height: 520px;
+    display: flex; flex-direction: column;
+  }
+  body.theme-light .friends-panel { background: #fff; }
+  .friends-panel.open { opacity:1;visibility:visible;transform:translateY(0) scale(1); }
+  .friends-panel-header { display:flex;align-items:center;justify-content:space-between;padding:0.9rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0; }
+  .friends-panel-title { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;color:var(--text); }
+  .friends-search-wrap { padding:0.6rem;border-bottom:1px solid var(--border);flex-shrink:0;position:relative; }
+  .friends-search-icon { position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;display:flex; }
+  .friends-search-input { width:100%;padding:0.5rem 1rem 0.5rem 2.2rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.82rem;outline:none;transition:all 0.2s; }
+  .friends-search-input:focus { border-color:rgba(124,58,237,0.45);background:rgba(124,58,237,0.04); }
+  .friends-search-result { position:absolute;left:0.6rem;right:0.6rem;top:100%;background:#0d0d14;border:1px solid rgba(124,58,237,0.25);border-radius:10px;z-index:100;max-height:200px;overflow-y:auto; }
+  body.theme-light .friends-search-result { background:#fff; }
+  .friends-search-item { display:flex;align-items:center;gap:0.55rem;padding:0.5rem 0.75rem;cursor:none;transition:background 0.15s; }
+  .friends-search-item:hover { background:rgba(255,255,255,0.05); }
+  .friends-search-item-avatar { width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border); }
+  .friends-search-item-name { font-size:0.8rem;color:var(--text);flex:1; }
+  .friends-search-item-btn { padding:0.2rem 0.55rem;border-radius:5px;font-size:0.68rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;border:1px solid rgba(124,58,237,0.35);background:rgba(124,58,237,0.1);color:var(--purple-light);transition:all 0.15s;white-space:nowrap; }
+  .friends-search-item-btn:hover { background:rgba(124,58,237,0.2); }
+  .friends-list { flex:1;overflow-y:auto;padding:0.5rem;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,0.3) transparent; }
+  .friends-section-label { font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);font-weight:600;padding:0.3rem 0.5rem;margin-top:0.25rem; }
+  .friend-row { display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0.65rem;border-radius:9px;cursor:none;transition:background 0.15s; }
+  .friend-row:hover { background:rgba(255,255,255,0.04); }
+  .friend-avatar-wrap { position:relative;flex-shrink:0; }
+  .friend-avatar { width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border); }
+  .friend-online-dot { position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;background:#34D399;border:1.5px solid var(--bg);box-shadow:0 0 5px #34D399; }
+  .friend-offline-dot { position:absolute;bottom:0;right:0;width:9px;height:9px;border-radius:50%;background:#64748B;border:1.5px solid var(--bg); }
+  .friend-info { flex:1;min-width:0; }
+  .friend-name { font-size:0.82rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Space Grotesk',sans-serif; }
+  .friend-status-text { font-size:0.68rem;color:var(--text-muted); }
+  .friend-actions { display:flex;gap:0.3rem; }
+  .friend-action-btn { width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;transition:all 0.15s; }
+  .friend-action-btn:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.08); }
+  .friend-action-btn svg { width:13px;height:13px; }
+  .friends-empty { text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:0.82rem; }
+
+  /* ============================================================
+     MESSAGES PAGE (FULL PAGE LAYOUT)
+     ============================================================ */
+  .msg-page {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 9000;
+    display: flex;
+    flex-direction: column;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.25s, visibility 0.25s;
+  }
+  .msg-page.open { opacity:1;visibility:visible; }
+  .msg-page-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1.25rem;
+    height: 56px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(12px);
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .msg-page-back {
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-family: 'Inter', sans-serif;
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .msg-page-back:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.08); }
+  .msg-page-title { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--text);flex:1; }
+  .msg-page-new { display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.85rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:8px;color:var(--purple-light);font-size:0.8rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;transition:all 0.2s; }
+  .msg-page-new:hover { background:rgba(124,58,237,0.2);box-shadow:0 0 12px rgba(124,58,237,0.2); }
+  .msg-layout {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+  }
+  /* LEFT SIDEBAR — conversations list */
+  .msg-sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: rgba(255,255,255,0.01);
+  }
+  .msg-sidebar-header {
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .msg-sidebar-title { font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.88rem;color:var(--text);margin-bottom:0.6rem;display:flex;align-items:center;justify-content:space-between; }
+  .msg-sidebar-add { width:24px;height:24px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;font-size:1rem;transition:all 0.15s;line-height:1; }
+  .msg-sidebar-add:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.08); }
+  .msg-search-bar { position:relative; }
+  .msg-search-bar input { width:100%;padding:0.45rem 0.85rem 0.45rem 2rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none;transition:all 0.2s; }
+  .msg-search-bar input:focus { border-color:rgba(124,58,237,0.4); }
+  .msg-search-bar svg { position:absolute;left:0.6rem;top:50%;transform:translateY(-50%);color:var(--text-muted);width:14px;height:14px;pointer-events:none; }
+  .msg-conv-list { flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(124,58,237,0.3) transparent; }
+  .msg-conv-item {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.75rem 1rem;
+    cursor: none;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+    position: relative;
+  }
+  .msg-conv-item:hover { background: rgba(255,255,255,0.03); }
+  .msg-conv-item.active { background: rgba(124,58,237,0.08); }
+  .msg-conv-item.unread .msg-conv-name { color:var(--text); font-weight:700; }
+  .msg-conv-avatar-wrap { position:relative;flex-shrink:0; }
+  .msg-conv-avatar { width:40px;height:40px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border); }
+  .msg-conv-group-icon { width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0; }
+  .msg-conv-online { position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:#34D399;border:1.5px solid var(--bg); }
+  .msg-conv-body { flex:1;min-width:0; }
+  .msg-conv-name { font-family:'Space Grotesk',sans-serif;font-size:0.83rem;font-weight:600;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .msg-conv-preview { font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:0.15rem;font-weight:300; }
+  .msg-conv-meta { display:flex;flex-direction:column;align-items:flex-end;gap:0.2rem;flex-shrink:0; }
+  .msg-conv-time { font-size:0.62rem;color:var(--text-muted); }
+  .msg-conv-unread-badge { min-width:18px;height:18px;border-radius:999px;background:var(--purple);font-size:0.6rem;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;padding:0 4px; }
+  .msg-empty-sidebar { text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:0.8rem; }
+
+  /* MAIN CHAT AREA */
+  .msg-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .msg-main-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+  .msg-main-empty svg { width:48px;height:48px;margin-bottom:1rem;opacity:0.3; }
+  .msg-chat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background: rgba(255,255,255,0.01);
+  }
+  .msg-chat-header-avatar { width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid var(--border); }
+  .msg-chat-header-group-icon { width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:0.85rem; }
+  .msg-chat-header-info { flex:1; }
+  .msg-chat-header-name { font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:700;color:var(--text); }
+  .msg-chat-header-sub { font-size:0.68rem;color:var(--text-muted);margin-top:0.05rem; }
+  .msg-chat-header-actions { display:flex;gap:0.4rem; }
+  .msg-chat-header-btn { width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;transition:all 0.2s; }
+  .msg-chat-header-btn:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.08); }
+  .msg-chat-header-btn svg { width:14px;height:14px; }
+  .msg-messages-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124,58,237,0.3) transparent;
+  }
+  .msg-date-separator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 500;
+  }
+  .msg-date-separator::before, .msg-date-separator::after { content:'';flex:1;height:1px;background:var(--border); }
+  .msg-bubble-group { display:flex;gap:0.55rem;margin-bottom:0.5rem;align-items:flex-end; }
+  .msg-bubble-group.mine { flex-direction:row-reverse; }
+  .msg-bubble-avatar { width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0;align-self:flex-end;cursor:none; }
+  .msg-bubble-avatar:hover { border-color:var(--purple-light); }
+  .msg-bubble-stack { display:flex;flex-direction:column;gap:0.18rem;max-width:65%; }
+  .msg-bubble-group.mine .msg-bubble-stack { align-items:flex-end; }
+  .msg-bubble-sender { font-size:0.68rem;color:var(--text-muted);margin-bottom:0.1rem;font-weight:500; }
+  .msg-bubble-group.mine .msg-bubble-sender { text-align:right; }
+  .msg-bubble {
+    padding: 0.55rem 0.9rem;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    color: var(--text);
+    line-height: 1.5;
+    word-break: break-word;
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    max-width: 100%;
+  }
+  .msg-bubble.mine {
+    background: rgba(124,58,237,0.18);
+    border-color: rgba(124,58,237,0.3);
+  }
+  .msg-bubble.gif-bubble { padding:0.3rem;background:transparent;border:none;overflow:hidden;border-radius:12px; }
+  .msg-bubble.gif-bubble .msg-gif-img { width:240px;max-width:100%;border-radius:10px;display:block;cursor:none; }
+  .msg-gif-wrap { position:relative;display:inline-block; }
+  .msg-gif-save-btn {
+    position: absolute; top: 6px; right: 6px;
+    width: 28px; height: 28px;
+    background: rgba(0,0,0,0.55);
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    transition: all 0.2s;
+    opacity: 0;
+  }
+  .msg-gif-wrap:hover .msg-gif-save-btn { opacity: 1; }
+  .msg-gif-save-btn.saved { color: #FCD34D; }
+  .msg-bubble-time { font-size:0.6rem;color:var(--text-muted);margin-top:0.15rem; }
+  .msg-bubble-group.mine .msg-bubble-time { text-align:right; }
+
+  /* INPUT ZONE */
+  .msg-input-zone {
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--border);
+    background: rgba(255,255,255,0.01);
+    flex-shrink: 0;
+  }
+  .msg-input-above { display:flex;align-items:center;gap:0.5rem;margin-bottom:0.45rem; }
+  .msg-input-above-avatar { width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid var(--border); }
+  .msg-input-above-pseudo { font-size:0.72rem;color:var(--text-muted);font-weight:500;font-family:'JetBrains Mono',monospace; }
+  .msg-input-row { display:flex;align-items:flex-end;gap:0.6rem; }
+  .msg-textbox {
+    flex: 1;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    padding: 0.65rem 1rem;
+    resize: none;
+    outline: none;
+    min-height: 44px;
+    max-height: 140px;
+    overflow-y: auto;
+    transition: border-color 0.2s, background 0.2s;
+    line-height: 1.5;
+  }
+  .msg-textbox:focus { border-color:rgba(124,58,237,0.45);background:rgba(124,58,237,0.04); }
+  .msg-textbox::placeholder { color:var(--text-muted); }
+  .msg-send-btn {
+    width: 40px; height: 40px;
+    background: rgba(124,58,237,0.15);
+    border: 1px solid rgba(124,58,237,0.35);
+    border-radius: 10px;
+    color: var(--purple-light);
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .msg-send-btn:hover { background:rgba(124,58,237,0.3);box-shadow:0 0 12px rgba(124,58,237,0.25); }
+  .msg-send-btn svg { width:17px;height:17px; }
+  .msg-action-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: none;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+  }
+  .msg-action-btn:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.08); }
+
+  /* EMOJI PICKER */
+  .emoji-picker-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: #0d0d14;
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 12px;
+    padding: 0.6rem;
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    width: 260px;
+    z-index: 100;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  body.theme-light .emoji-picker-panel { background:#fff; }
+  .emoji-picker-panel.open { display:flex; }
+  .emoji-btn-item { width:30px;height:30px;border-radius:6px;border:none;background:transparent;font-size:1.1rem;cursor:none;transition:background 0.15s;display:flex;align-items:center;justify-content:center; }
+  .emoji-btn-item:hover { background:rgba(124,58,237,0.12); }
+
+  /* GIF PICKER */
+  .gif-picker-panel {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: #0d0d14;
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 12px;
+    width: 300px;
+    z-index: 100;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 360px;
+  }
+  body.theme-light .gif-picker-panel { background:#fff; }
+  .gif-picker-panel.open { display:flex; }
+  .gif-search-bar { padding:0.5rem;border-bottom:1px solid var(--border);position:relative;flex-shrink:0; }
+  .gif-search-bar input { width:100%;padding:0.4rem 0.75rem 0.4rem 2rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none; }
+  .gif-search-bar input:focus { border-color:rgba(124,58,237,0.4); }
+  .gif-search-bar svg { position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--text-muted);width:13px;height:13px;pointer-events:none; }
+  .gif-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;padding:0.5rem;overflow-y:auto;flex:1;scrollbar-width:thin; }
+  .gif-item { border-radius:8px;overflow:hidden;cursor:none;position:relative;aspect-ratio:4/3; }
+  .gif-item img { width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s; }
+  .gif-item:hover img { transform:scale(1.04); }
+  .gif-loading { text-align:center;padding:1.5rem;color:var(--text-muted);font-size:0.8rem;grid-column:1/-1; }
+  .gif-saved-label { font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple-light);font-weight:600;padding:0.35rem 0.5rem;border-bottom:1px solid var(--border); }
+
+  /* NEW DM / GROUP MODAL */
+  .new-conv-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1rem;
+  }
+  .new-conv-overlay.open { opacity:1;visibility:visible; }
+  .new-conv-modal {
+    background: #0d0d14;
+    border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 420px;
+    padding: 1.5rem;
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  body.theme-light .new-conv-modal { background:#fff; }
+  .new-conv-overlay.open .new-conv-modal { transform:translateY(0) scale(1); }
+  .new-conv-title { font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:1rem; }
+  .new-conv-tabs { display:flex;gap:0.4rem;margin-bottom:1rem;background:rgba(255,255,255,0.03);border-radius:8px;padding:0.2rem; }
+  .new-conv-tab { flex:1;padding:0.45rem;border:none;background:transparent;border-radius:6px;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:500;cursor:none;transition:all 0.2s; }
+  .new-conv-tab.active { background:rgba(124,58,237,0.15);color:var(--purple-light); }
+  .new-conv-field { margin-bottom:0.85rem; }
+  .new-conv-label { display:block;font-size:0.68rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.35rem; }
+  .new-conv-input { width:100%;padding:0.55rem 0.8rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.85rem;outline:none;transition:all 0.2s; }
+  .new-conv-input:focus { border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.05); }
+  .new-conv-user-results { max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;margin-top:0.3rem; }
+  .new-conv-user-item { display:flex;align-items:center;gap:0.55rem;padding:0.5rem 0.75rem;cursor:none;transition:background 0.15s; }
+  .new-conv-user-item:hover { background:rgba(255,255,255,0.04); }
+  .new-conv-user-item img { width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid var(--border); }
+  .new-conv-user-item span { font-size:0.82rem;color:var(--text);flex:1; }
+  .new-conv-user-item .add-btn { padding:0.2rem 0.5rem;border-radius:5px;font-size:0.68rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;border:1px solid rgba(124,58,237,0.35);background:rgba(124,58,237,0.1);color:var(--purple-light);transition:all 0.15s; }
+  .new-conv-selected { display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:0.85rem;min-height:28px; }
+  .new-conv-tag { display:flex;align-items:center;gap:0.3rem;padding:0.2rem 0.5rem;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:999px;font-size:0.72rem;color:var(--purple-light);font-weight:500; }
+  .new-conv-tag button { background:none;border:none;color:inherit;cursor:none;font-size:0.75rem;line-height:1;padding:0;margin-left:0.15rem; }
+  .new-conv-btn { width:100%;padding:0.6rem;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.35);border-radius:8px;color:var(--purple-light);font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:700;cursor:none;transition:all 0.2s;margin-top:0.5rem; }
+  .new-conv-btn:hover { background:rgba(124,58,237,0.25); }
+  .new-conv-close { float:right;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:7px;width:28px;height:28px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;font-size:0.9rem;transition:all .2s; }
+  .new-conv-close:hover { background:rgba(255,255,255,0.12);color:var(--text); }
+
+  /* GROUP MEMBERS PANEL */
+  .group-members-panel {
+    width: 220px;
+    flex-shrink: 0;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: rgba(255,255,255,0.01);
+    display: none;
+  }
+  .group-members-panel.open { display:flex; }
+  .group-members-header { padding:0.85rem 1rem;border-bottom:1px solid var(--border);flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.82rem;color:var(--text); }
+  .group-member-item { display:flex;align-items:center;gap:0.55rem;padding:0.5rem 0.9rem;cursor:none;transition:background 0.15s; }
+  .group-member-item:hover { background:rgba(255,255,255,0.03); }
+  .group-member-avatar { width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0; }
+  .group-member-name { font-size:0.78rem;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .group-member-role { font-size:0.6rem;color:var(--purple-light);font-weight:600; }
+  .group-member-actions { display:flex;gap:0.2rem; }
+  .group-member-action { width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;font-size:0.65rem;transition:all 0.15s; }
+  .group-member-action:hover { border-color:rgba(239,68,68,0.4);color:#F87171;background:rgba(239,68,68,0.08); }
+
+  /* INBOX REQUEST NOTIFICATION */
+  .inbox-request-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+  }
+  .inbox-req-info { flex:1;min-width:0; }
+  .inbox-req-name { font-size:0.82rem;font-weight:600;color:var(--text);font-family:'Space Grotesk',sans-serif; }
+  .inbox-req-sub { font-size:0.7rem;color:var(--text-muted); }
+  .inbox-req-btns { display:flex;gap:0.35rem; }
+  .inbox-req-btn { padding:0.28rem 0.6rem;border-radius:6px;font-size:0.7rem;font-weight:600;font-family:'Inter',sans-serif;cursor:none;border:1px solid;transition:all 0.15s; }
+  .inbox-req-btn.accept { border-color:rgba(16,185,129,0.35);background:rgba(16,185,129,0.1);color:#34D399; }
+  .inbox-req-btn.block { border-color:rgba(239,68,68,0.3);background:rgba(239,68,68,0.07);color:#F87171; }
+  .inbox-req-btn.decline { border-color:var(--border);background:transparent;color:var(--text-muted); }
+
+  .muted-badge { font-size:0.6rem;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);color:#FCD34D;border-radius:4px;padding:0.05rem 0.3rem;font-family:'JetBrains Mono',monospace;font-weight:600; }
+
   @media (max-width:768px) {
     .cards-grid { grid-template-columns:1fr; }
     .discord-banner { flex-direction:column; }
@@ -1070,6 +1616,8 @@
     .admin-panel { margin:0.5rem auto; }
     .profile-meta-grid { grid-template-columns:1fr; }
     .welcome-box { padding:2rem 1.5rem; }
+    .msg-sidebar { width:240px; }
+    .group-members-panel { display:none!important; }
   }
   @media (prefers-reduced-motion:reduce) { .card-appear { animation:none; } }
 
@@ -1419,6 +1967,23 @@
   </div>
   <div class="nav-right">
     <div class="nav-user-zone">
+      <div class="nav-social-zone" id="navSocialZone" style="display:none;">
+        <!-- Messages -->
+        <button class="nav-icon-btn" id="navMsgBtn" title="Messages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span class="badge-count" id="navMsgBadge"></span>
+        </button>
+        <!-- Friends -->
+        <button class="nav-icon-btn" id="navFriendsBtn" title="Amis">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          <span class="badge-dot" id="navFriendsBadge"></span>
+        </button>
+        <!-- Notifications -->
+        <button class="nav-icon-btn" id="navNotifBtn" title="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge-count" id="navNotifBadge"></span>
+        </button>
+      </div>
       <div class="nav-auth-btns" id="navAuthBtns">
         <button class="btn-login" id="navLoginBtn">Connexion</button>
         <button class="btn-signup" id="navSignupBtn">S'inscrire</button>
@@ -1576,6 +2141,165 @@
   </div>
 
   <!-- Footer removed -->
+</div>
+
+<!-- NOTIFICATIONS PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-header">
+    <span class="notif-panel-title">🔔 Notifications</span>
+    <button class="notif-panel-clear" id="notifClearAll">Tout marquer comme lu</button>
+  </div>
+  <div class="notif-list" id="notifList">
+    <div class="notif-empty">Aucune notification</div>
+  </div>
+</div>
+
+<!-- FRIENDS PANEL -->
+<div class="friends-panel" id="friendsPanel">
+  <div class="friends-panel-header">
+    <span class="friends-panel-title">👥 Amis</span>
+  </div>
+  <div class="friends-search-wrap" style="position:relative;">
+    <div class="friends-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+    <input class="friends-search-input" id="friendsSearchInput" placeholder="Rechercher un utilisateur...">
+    <div class="friends-search-result" id="friendsSearchResult" style="display:none;"></div>
+  </div>
+  <div class="friends-list" id="friendsList">
+    <div class="friends-empty">Aucun ami pour l'instant.<br>Recherche quelqu'un ci-dessus.</div>
+  </div>
+</div>
+
+<!-- MESSAGES FULL PAGE -->
+<div class="msg-page" id="msgPage">
+  <div class="msg-page-nav">
+    <button class="msg-page-back" id="msgPageBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="m15 18-6-6 6-6"/></svg>
+      Retour
+    </button>
+    <span class="msg-page-title">💬 Messages</span>
+    <button class="msg-page-new" id="msgNewConvBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 5v14M5 12h14"/></svg>
+      Nouveau
+    </button>
+  </div>
+  <div class="msg-layout">
+    <!-- SIDEBAR -->
+    <div class="msg-sidebar">
+      <div class="msg-sidebar-header">
+        <div class="msg-sidebar-title">
+          Conversations
+          <button class="msg-sidebar-add" id="msgSidebarAddBtn" title="Nouveau message / groupe">+</button>
+        </div>
+        <div class="msg-search-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="msgConvSearch" placeholder="Rechercher...">
+        </div>
+      </div>
+      <div class="msg-conv-list" id="msgConvList">
+        <div class="msg-empty-sidebar">Aucune conversation.<br>Clique sur "+" pour commencer.</div>
+      </div>
+    </div>
+    <!-- MAIN CHAT -->
+    <div class="msg-main" id="msgMain">
+      <div class="msg-main-empty" id="msgMainEmpty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Sélectionne une conversation pour commencer
+      </div>
+      <div id="msgChatArea" style="display:none;flex:1;display:none;flex-direction:column;overflow:hidden;">
+        <!-- CHAT HEADER -->
+        <div class="msg-chat-header" id="msgChatHeader">
+          <div id="msgChatHeaderAvatar"></div>
+          <div class="msg-chat-header-info">
+            <div class="msg-chat-header-name" id="msgChatHeaderName">—</div>
+            <div class="msg-chat-header-sub" id="msgChatHeaderSub"></div>
+          </div>
+          <div class="msg-chat-header-actions">
+            <button class="msg-chat-header-btn" id="msgChatMembersBtn" title="Membres du groupe" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </button>
+            <button class="msg-chat-header-btn" id="msgChatLeaveBtn" title="Quitter / Fermer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+        <!-- MESSAGES -->
+        <div class="msg-messages-area" id="msgMessagesArea"></div>
+        <!-- INPUT -->
+        <div class="msg-input-zone" id="msgInputZone">
+          <div class="msg-input-above">
+            <img class="msg-input-above-avatar" id="msgInputAvatar" src="" alt="">
+            <span class="msg-input-above-pseudo" id="msgInputPseudo"></span>
+          </div>
+          <div class="msg-input-row" style="position:relative;">
+            <textarea class="msg-textbox" id="msgTextbox" placeholder="Envoyer un message..." rows="1"></textarea>
+            <div style="display:flex;flex-direction:column;gap:0.3rem;position:relative;">
+              <div style="position:relative;">
+                <button class="msg-action-btn" id="msgEmojiBtn" title="Emoji">😊</button>
+                <div class="emoji-picker-panel" id="emojiPickerPanel"></div>
+              </div>
+              <div style="position:relative;">
+                <button class="msg-action-btn" id="msgGifBtn" title="GIF">GIF</button>
+                <div class="gif-picker-panel" id="gifPickerPanel">
+                  <div class="gif-search-bar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="gifSearchInput" placeholder="Rechercher un GIF...">
+                  </div>
+                  <div class="gif-grid" id="gifGrid"><div class="gif-loading">Recherche des GIFs...</div></div>
+                </div>
+              </div>
+            </div>
+            <button class="msg-send-btn" id="msgSendBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- GROUP MEMBERS PANEL -->
+    <div class="group-members-panel" id="groupMembersPanel">
+      <div class="group-members-header">Membres</div>
+      <div id="groupMembersList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NEW CONVERSATION MODAL -->
+<div class="new-conv-overlay" id="newConvOverlay">
+  <div class="new-conv-modal">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+      <span class="new-conv-title">Nouveau message</span>
+      <button class="new-conv-close" id="newConvClose">✕</button>
+    </div>
+    <div class="new-conv-tabs">
+      <button class="new-conv-tab active" data-nctab="dm" id="nctabDm">Message privé</button>
+      <button class="new-conv-tab" data-nctab="group" id="nctabGroup">Groupe</button>
+    </div>
+    <div id="ncTabDmContent">
+      <div class="new-conv-field">
+        <label class="new-conv-label">Destinataire (nom d'utilisateur)</label>
+        <input type="text" class="new-conv-input" id="ncDmUsername" placeholder="ex: x4tmq_official">
+        <div class="new-conv-user-results" id="ncDmResults" style="display:none;"></div>
+      </div>
+      <div class="new-conv-field">
+        <label class="new-conv-label">Message (optionnel)</label>
+        <input type="text" class="new-conv-input" id="ncDmMessage" placeholder="Bonjour !">
+      </div>
+      <button class="new-conv-btn" id="ncDmSendBtn">Envoyer</button>
+    </div>
+    <div id="ncTabGroupContent" style="display:none;">
+      <div class="new-conv-field">
+        <label class="new-conv-label">Nom du groupe</label>
+        <input type="text" class="new-conv-input" id="ncGroupName" placeholder="Mon groupe">
+      </div>
+      <div class="new-conv-field">
+        <label class="new-conv-label">Ajouter des membres</label>
+        <input type="text" class="new-conv-input" id="ncGroupSearch" placeholder="Rechercher...">
+        <div class="new-conv-user-results" id="ncGroupResults" style="display:none;"></div>
+      </div>
+      <div class="new-conv-selected" id="ncGroupSelected"></div>
+      <button class="new-conv-btn" id="ncGroupCreateBtn">Créer le groupe</button>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1874,7 +2598,7 @@ const L = {
     btnBuy:'Acheter',
     btnSite:'Site',
     btnDiscord:'Discord',
-    successRate:'Taux de réussite',
+    successRate:'sUNC',
     // Valeurs des stats
     val_free:'Gratuit',
     val_paid:'Payant',
@@ -1897,11 +2621,11 @@ const L = {
     helpStep1:'Rejoins le Discord',
     helpStep1Desc:'Clique sur le bouton ci-dessous pour accéder au serveur.',
     helpStep2:'Ouvre un ticket',
-    helpStep2Desc:'Dans la catégorie "🌊 | Server", crée un ticket avec ta demande.',
+    helpStep2Desc:'Dans la section 🌊 | Server, crée un ticket avec ta demande.',
     helpStep3:'Obtiens de l\'aide',
     helpStep3Desc:'Un membre de l\'équipe du staff te répondra et t\'aideras a résoudre ton probleme.',
     helpJoin:'Rejoindre le Discord',
-    helpNote:'Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #🎟️〃ticket.'
+    helpNote:'Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #support.'
   },
   en:{
     navLogin:'Login',
@@ -2042,7 +2766,7 @@ const L = {
     btnBuy:'Buy',
     btnSite:'Site',
     btnDiscord:'Discord',
-    successRate:'Success rate',
+    successRate:'sUNC',
     // Valeurs des stats
     val_free:'Free',
     val_paid:'Paid',
@@ -2065,11 +2789,11 @@ const L = {
     helpStep1:'Join Discord',
     helpStep1Desc:'Click the button below to access the server.',
     helpStep2:'Open a ticket',
-    helpStep2Desc:'In the "🌊 | Server" Tab, create a ticket with your request.',
+    helpStep2Desc:'In the 🌊 | Server section, create a ticket with your request.',
     helpStep3:'Get help',
     helpStep3Desc:'A staff team member will reply and help you solve your problem.',
     helpJoin:'Join Discord',
-    helpNote:'Already on Discord? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Click here</a> to go directly to #🎟️〃ticket.'
+    helpNote:'Already on Discord? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Click here</a> to go directly to #support.'
   }
 };
 function t(k){ return (L[currentLang]?.[k]) ?? (L['fr'][k] ?? k); }
@@ -2277,7 +3001,7 @@ async function sbLoadScripts(){
 }
 async function sbInsertDefaultScripts(){
   const defaults = [
-    {id:'examination-v4',name:'Examination v8',category:'game',status:'new',status_label:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',game_name:'Examination',game_link:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',active_players:'~600',maturity:'Modérée',script_file:'Examination-Main[obf].lua',description:'Hitbox Expander, Entities ESP, Beat the Games, Ignor Landmines, Get Infected etc... This examination script might be the best you will can found.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Examination v8\nloadstring(game:HttpGet("https://raw.githubusercontent.com/x4tmqq/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()'},
+    {id:'examination-v4',name:'Examination v4',category:'game',status:'new',status_label:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',game_name:'Examination',game_link:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',active_players:'~600',maturity:'Modérée',script_file:'Examination-Main[obf].lua',description:'Automatise et gère vos examinations avec précision. Détection intelligente des formulaires.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Examination v4\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20[obf]"))()'},
     {id:'ink-game-v7',name:'Ink Game v7',category:'game',status:'active',status_label:'Actif',banner:'https://tr.rbxcdn.com/180DAY-eeb754830041c5f9ddfd168242949f14/768/432/Image/Webp/noFilter',game_name:'Ink Game',game_link:'https://www.roblox.com/fr/games/99567941238278/Ink-Game',creator:'game i think',active_players:'~10 000',maturity:'Moyenne',script_file:'InkGame-Main[obf].lua',description:'Script Ink Game avec ESP, auto-collect et optimisations avancées.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Ink Game v7\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'},
     {id:'infinite-yield',name:'Infinite Yield',category:'util',status:'popular',status_label:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',game_name:'Roblox (universel)',game_link:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',active_players:null,maturity:null,script_file:'infiniteyield.lua',description:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',script_display:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'},
     {id:'dex-explorer',name:'Dex Explorer',category:'util',status:'popular',status_label:'Populaire',banner:'https://i.postimg.cc/t1S7Y1qF/placeholder.png',game_name:'Roblox (universel)',game_link:null,creator:'AZYsGithub',active_players:null,maturity:'Modérée',script_file:'dex-explorer.lua',description:'Accède à l\'intégralité du jeu (excepté les ServerSided Scripts). Explore chaque recoin de l\'univers Roblox.',script:'loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()',script_display:'-- Dex Explorer\nloadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()'}
@@ -2753,6 +3477,7 @@ function updateAuthUI(){
   document.getElementById('dashAccountGuest').style.display = loggedIn?'none':'block';
   updateVoteUI();
   updateCommentUI();
+  if(typeof updateSocialZone==='function') updateSocialZone();
 }
 
 function updateCommentUI(){
@@ -3627,6 +4352,1149 @@ async function init(){
     }
   } catch(e){ console.error('Init error:', e); showToast('Erreur de connexion Supabase','#F87171'); }
   finally{ hideLoading(); }
+}
+
+// ============================================================
+// SUPABASE — FRIENDS
+// ============================================================
+async function sbSendFriendRequest(fromUsername, toUsername) {
+  // Check if already exists
+  const { data: existing } = await sb.from('friends')
+    .select('*')
+    .or(`and(requester.eq.${fromUsername},target.eq.${toUsername}),and(requester.eq.${toUsername},target.eq.${fromUsername})`)
+    .maybeSingle();
+  if (existing) return { error: 'already_exists', data: existing };
+  const { data, error } = await sb.from('friends').insert({
+    requester: fromUsername,
+    target: toUsername,
+    status: 'pending'
+  }).select('*').single();
+  if (error) throw new Error('Erreur envoi demande: ' + error.message);
+  // Create notification for target
+  await sbCreateNotification(toUsername, {
+    type: 'friend_request',
+    from_username: fromUsername,
+    text: `<strong>${fromUsername}</strong> t'a envoyé une demande d'ami.`,
+    data: { requester: fromUsername }
+  });
+  return { data };
+}
+async function sbAcceptFriendRequest(requestId, fromUsername, toUsername) {
+  const { error } = await sb.from('friends').update({ status: 'accepted' }).eq('id', requestId);
+  if (error) throw new Error(error.message);
+  await sbCreateNotification(fromUsername, {
+    type: 'friend_accept',
+    from_username: toUsername,
+    text: `<strong>${toUsername}</strong> a accepté ta demande d'ami !`,
+    data: {}
+  });
+}
+async function sbDeclineFriendRequest(requestId) {
+  const { error } = await sb.from('friends').delete().eq('id', requestId);
+  if (error) throw new Error(error.message);
+}
+async function sbGetFriends(username) {
+  const { data, error } = await sb.from('friends').select('*')
+    .or(`requester.eq.${username},target.eq.${username}`)
+    .eq('status', 'accepted');
+  if (error) { console.error('[sbGetFriends]', error); return []; }
+  return (data || []).map(f => f.requester === username ? f.target : f.requester);
+}
+async function sbGetPendingFriendRequests(username) {
+  const { data, error } = await sb.from('friends').select('*')
+    .eq('target', username).eq('status', 'pending');
+  if (error) { console.error('[sbGetPendingFriendRequests]', error); return []; }
+  return data || [];
+}
+async function sbGetFriendshipStatus(u1, u2) {
+  const { data } = await sb.from('friends').select('*')
+    .or(`and(requester.eq.${u1},target.eq.${u2}),and(requester.eq.${u2},target.eq.${u1})`)
+    .maybeSingle();
+  return data || null;
+}
+async function sbRemoveFriend(u1, u2) {
+  await sb.from('friends').delete()
+    .or(`and(requester.eq.${u1},target.eq.${u2}),and(requester.eq.${u2},target.eq.${u1})`);
+}
+
+// ============================================================
+// SUPABASE — NOTIFICATIONS
+// ============================================================
+async function sbCreateNotification(targetUsername, { type, from_username, text, data: ndata }) {
+  const { error } = await sb.from('notifications').insert({
+    target_username: targetUsername,
+    type,
+    from_username: from_username || null,
+    text,
+    data: ndata || {},
+    read: false
+  });
+  if (error) console.error('[sbCreateNotification]', error);
+}
+async function sbGetNotifications(username) {
+  const { data, error } = await sb.from('notifications').select('*')
+    .eq('target_username', username)
+    .order('created_at', { ascending: false })
+    .limit(50);
+  if (error) { console.error('[sbGetNotifications]', error); return []; }
+  return data || [];
+}
+async function sbMarkNotificationsRead(username) {
+  await sb.from('notifications').update({ read: true }).eq('target_username', username).eq('read', false);
+}
+async function sbDeleteNotification(id) {
+  await sb.from('notifications').delete().eq('id', id);
+}
+
+// ============================================================
+// SUPABASE — MESSAGES / CONVERSATIONS
+// ============================================================
+async function sbGetOrCreateConversation(participants, groupName = null) {
+  // For DMs (2 participants), check if exists
+  if (participants.length === 2 && !groupName) {
+    const { data } = await sb.from('conversations').select('*')
+      .contains('participants', participants)
+      .is('group_name', null)
+      .maybeSingle();
+    if (data && data.participants.length === 2) return data;
+  }
+  // Create new
+  const { data, error } = await sb.from('conversations').insert({
+    participants,
+    group_name: groupName || null,
+    creator: currentUser?.username || null,
+    muted_members: [],
+    created_at: new Date().toISOString()
+  }).select('*').single();
+  if (error) throw new Error('Erreur conversation: ' + error.message);
+  return data;
+}
+async function sbGetConversations(username) {
+  const { data, error } = await sb.from('conversations').select('*')
+    .contains('participants', [username])
+    .order('last_message_at', { ascending: false, nullsFirst: false });
+  if (error) { console.error('[sbGetConversations]', error); return []; }
+  return data || [];
+}
+async function sbSendMessage(conversationId, content, type = 'text') {
+  if (!currentUser) return;
+  const msg = {
+    conversation_id: conversationId,
+    sender_username: currentUser.username,
+    sender_display: currentUser.display_name || currentUser.username,
+    sender_avatar: currentUser.avatar || AVATAR_OPTIONS[0],
+    content,
+    type,
+    created_at: new Date().toISOString()
+  };
+  const { data, error } = await sb.from('messages').insert(msg).select('*').single();
+  if (error) throw new Error('Erreur envoi message: ' + error.message);
+  // Update conversation last_message_at
+  await sb.from('conversations').update({ last_message_at: msg.created_at }).eq('id', conversationId);
+  return data;
+}
+async function sbGetMessages(conversationId) {
+  const { data, error } = await sb.from('messages').select('*')
+    .eq('conversation_id', conversationId)
+    .order('created_at', { ascending: true });
+  if (error) { console.error('[sbGetMessages]', error); return []; }
+  return data || [];
+}
+async function sbGetConversation(id) {
+  const { data, error } = await sb.from('conversations').select('*').eq('id', id).maybeSingle();
+  if (error) { console.error('[sbGetConversation]', error); return null; }
+  return data;
+}
+async function sbLeaveConversation(convId, username) {
+  const conv = await sbGetConversation(convId);
+  if (!conv) return;
+  const newParticipants = conv.participants.filter(p => p !== username);
+  if (newParticipants.length === 0) {
+    await sb.from('conversations').delete().eq('id', convId);
+    await sb.from('messages').delete().eq('conversation_id', convId);
+  } else {
+    await sb.from('conversations').update({ participants: newParticipants }).eq('id', convId);
+  }
+}
+async function sbKickFromGroup(convId, targetUsername) {
+  const conv = await sbGetConversation(convId);
+  if (!conv) return;
+  const newParticipants = conv.participants.filter(p => p !== targetUsername);
+  await sb.from('conversations').update({ participants: newParticipants }).eq('id', convId);
+}
+async function sbMuteInGroup(convId, targetUsername, durationMs) {
+  const conv = await sbGetConversation(convId);
+  if (!conv) return;
+  const muted = [...(conv.muted_members || [])];
+  muted.push({ username: targetUsername, until: new Date(Date.now() + durationMs).toISOString() });
+  await sb.from('conversations').update({ muted_members: muted }).eq('id', convId);
+}
+async function sbSaveFavoriteGif(username, gifUrl) {
+  const { data } = await sb.from('users').select('avatar').eq('username', username).maybeSingle();
+  // Store saved GIFs in a separate simple approach using a column
+  const { data: u } = await sb.from('users').select('*').eq('username', username).maybeSingle();
+  if (!u) return;
+  const saved = u.saved_gifs || [];
+  if (!saved.includes(gifUrl)) saved.push(gifUrl);
+  await sb.from('users').update({ saved_gifs: saved }).eq('username', username);
+}
+async function sbUnsaveFavoriteGif(username, gifUrl) {
+  const { data: u } = await sb.from('users').select('*').eq('username', username).maybeSingle();
+  if (!u) return;
+  const saved = (u.saved_gifs || []).filter(g => g !== gifUrl);
+  await sb.from('users').update({ saved_gifs: saved }).eq('username', username);
+}
+async function sbGetSavedGifs(username) {
+  const { data: u } = await sb.from('users').select('saved_gifs').eq('username', username).maybeSingle();
+  return u?.saved_gifs || [];
+}
+
+// Send DM to non-friend (inbox request system)
+async function sbSendInboxMessage(toUsername, content) {
+  if (!currentUser) return;
+  // Create a conversation with a "pending" flag
+  const { data: conv, error } = await sb.from('conversations').insert({
+    participants: [currentUser.username, toUsername],
+    group_name: null,
+    creator: currentUser.username,
+    muted_members: [],
+    is_pending: true, // pending acceptance
+    created_at: new Date().toISOString()
+  }).select('*').single();
+  if (error) throw new Error(error.message);
+  await sbSendMessage(conv.id, content);
+  await sbCreateNotification(toUsername, {
+    type: 'inbox_dm',
+    from_username: currentUser.username,
+    text: `<strong>${currentUser.display_name || currentUser.username}</strong> t'a envoyé un message.`,
+    data: { conv_id: conv.id }
+  });
+  return conv;
+}
+
+// ============================================================
+// NOTIFICATIONS UI
+// ============================================================
+let notifPanelOpen = false;
+let friendsPanelOpen = false;
+let notifCache = [];
+
+async function loadAndRenderNotifications() {
+  if (!currentUser) return;
+  notifCache = await sbGetNotifications(currentUser.username);
+  renderNotifications();
+  updateNotifBadge();
+}
+
+function updateNotifBadge() {
+  const unread = notifCache.filter(n => !n.read).length;
+  const badge = document.getElementById('navNotifBadge');
+  if (!badge) return;
+  if (unread > 0) {
+    badge.textContent = unread > 9 ? '9+' : unread;
+    badge.classList.add('visible');
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
+function renderNotifications() {
+  const list = document.getElementById('notifList');
+  if (!list) return;
+  if (notifCache.length === 0) {
+    list.innerHTML = '<div class="notif-empty">Aucune notification</div>';
+    return;
+  }
+  const ICON_MAP = {
+    'like': { cls: 'ni-like', emoji: '👍' },
+    'comment_like': { cls: 'ni-like', emoji: '👍' },
+    'new_script': { cls: 'ni-script', emoji: '📜' },
+    'friend_request': { cls: 'ni-fr', emoji: '👤' },
+    'friend_accept': { cls: 'ni-fr', emoji: '✅' },
+    'inbox_dm': { cls: 'ni-msg', emoji: '💬' },
+    'vote_on_script': { cls: 'ni-vote', emoji: '⭐' }
+  };
+  list.innerHTML = notifCache.map(n => {
+    const icon = ICON_MAP[n.type] || { cls: 'ni-msg', emoji: '🔔' };
+    let actionsHtml = '';
+    if (n.type === 'friend_request' && n.data?.requester && !n.read) {
+      actionsHtml = `<div class="notif-actions">
+        <button class="notif-action-btn accept" onclick="acceptFriendRequestFromNotif('${n.id}','${n.data.requester}')">Accepter</button>
+        <button class="notif-action-btn decline" onclick="declineFriendRequestFromNotif('${n.id}','${n.data.requester}')">Refuser</button>
+      </div>`;
+    }
+    if (n.type === 'inbox_dm' && n.data?.conv_id && !n.read) {
+      actionsHtml = `<div class="notif-actions">
+        <button class="notif-action-btn accept" onclick="acceptInboxDm('${n.id}','${n.data.conv_id}')">Accepter</button>
+        <button class="notif-action-btn decline" onclick="declineInboxDm('${n.id}','${n.data.conv_id}')">Supprimer</button>
+      </div>`;
+    }
+    return `<div class="notif-item${n.read ? '' : ' unread'}">
+      <div class="notif-icon ${icon.cls}">${icon.emoji}</div>
+      <div class="notif-body">
+        <div class="notif-text">${n.text}</div>
+        <div class="notif-time">${timeAgo(n.created_at)}</div>
+        ${actionsHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function acceptFriendRequestFromNotif(notifId, requester) {
+  if (!currentUser) return;
+  const { data: pending } = await sb.from('friends').select('*')
+    .eq('requester', requester).eq('target', currentUser.username).eq('status', 'pending').maybeSingle();
+  if (pending) {
+    await sbAcceptFriendRequest(pending.id, requester, currentUser.username);
+  }
+  await sb.from('notifications').update({ read: true }).eq('id', notifId);
+  showToast(`✅ ${requester} est maintenant ton ami !`, '#34D399');
+  loadAndRenderNotifications();
+  renderFriendsPanel();
+}
+async function declineFriendRequestFromNotif(notifId, requester) {
+  if (!currentUser) return;
+  const { data: pending } = await sb.from('friends').select('*')
+    .eq('requester', requester).eq('target', currentUser.username).maybeSingle();
+  if (pending) await sbDeclineFriendRequest(pending.id);
+  await sb.from('notifications').update({ read: true }).eq('id', notifId);
+  showToast('Demande refusée.', '#F87171');
+  loadAndRenderNotifications();
+}
+async function acceptInboxDm(notifId, convId) {
+  // Remove pending flag
+  await sb.from('conversations').update({ is_pending: false }).eq('id', convId);
+  await sb.from('notifications').update({ read: true }).eq('id', notifId);
+  showToast('💬 Message accepté !', '#34D399');
+  loadAndRenderNotifications();
+  openMessagesPage(convId);
+}
+async function declineInboxDm(notifId, convId) {
+  await sb.from('conversations').delete().eq('id', convId);
+  await sb.from('messages').delete().eq('conversation_id', convId);
+  await sb.from('notifications').update({ read: true }).eq('id', notifId);
+  showToast('Message supprimé.', '#F87171');
+  loadAndRenderNotifications();
+}
+
+document.getElementById('navNotifBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  friendsPanelOpen = false;
+  document.getElementById('friendsPanel')?.classList.remove('open');
+  notifPanelOpen = !notifPanelOpen;
+  document.getElementById('notifPanel')?.classList.toggle('open', notifPanelOpen);
+  if (notifPanelOpen) {
+    loadAndRenderNotifications();
+    if (currentUser) sbMarkNotificationsRead(currentUser.username).then(() => {
+      notifCache = notifCache.map(n => ({ ...n, read: true }));
+      updateNotifBadge();
+    });
+  }
+});
+document.getElementById('notifClearAll')?.addEventListener('click', async () => {
+  if (!currentUser) return;
+  await sbMarkNotificationsRead(currentUser.username);
+  notifCache = notifCache.map(n => ({ ...n, read: true }));
+  renderNotifications();
+  updateNotifBadge();
+});
+
+// ============================================================
+// FRIENDS PANEL UI
+// ============================================================
+let friendsCache = [];
+let friendSearchTimer = null;
+
+async function renderFriendsPanel() {
+  if (!currentUser) return;
+  const friendUsernames = await sbGetFriends(currentUser.username);
+  const pending = await sbGetPendingFriendRequests(currentUser.username);
+  friendsCache = friendUsernames;
+
+  // Update friends badge
+  const frBadge = document.getElementById('navFriendsBadge');
+  if (frBadge) frBadge.classList.toggle('visible', pending.length > 0);
+
+  const list = document.getElementById('friendsList');
+  if (!list) return;
+
+  let html = '';
+  if (pending.length > 0) {
+    html += `<div class="friends-section-label">Demandes reçues (${pending.length})</div>`;
+    for (const req of pending) {
+      const u = await sbGetUser(req.requester);
+      if (!u) continue;
+      html += `<div class="friend-row">
+        <div class="friend-avatar-wrap">
+          <img class="friend-avatar" src="${escHtml(u.avatar || AVATAR_OPTIONS[0])}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+        </div>
+        <div class="friend-info">
+          <div class="friend-name">${escHtml(u.display_name || u.username)}</div>
+          <div class="friend-status-text">@${escHtml(u.username)}</div>
+        </div>
+        <div class="friend-actions">
+          <button class="notif-action-btn accept" style="font-size:0.65rem;padding:0.2rem 0.45rem;cursor:none;" onclick="acceptFriendReqDirect('${escHtml(req.id)}','${escHtml(req.requester)}')">✓</button>
+          <button class="notif-action-btn decline" style="font-size:0.65rem;padding:0.2rem 0.45rem;cursor:none;" onclick="declineFriendReqDirect('${escHtml(req.id)}')">✕</button>
+        </div>
+      </div>`;
+    }
+  }
+
+  if (friendUsernames.length > 0) {
+    html += `<div class="friends-section-label">Amis (${friendUsernames.length})</div>`;
+    for (const fname of friendUsernames) {
+      const u = await sbGetUser(fname);
+      if (!u) continue;
+      const online = isOnline(u);
+      html += `<div class="friend-row">
+        <div class="friend-avatar-wrap">
+          <img class="friend-avatar" src="${escHtml(u.avatar || AVATAR_OPTIONS[0])}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+          <div class="${online ? 'friend-online-dot' : 'friend-offline-dot'}"></div>
+        </div>
+        <div class="friend-info">
+          <div class="friend-name">${escHtml(u.display_name || u.username)}</div>
+          <div class="friend-status-text">${online ? '🟢 En ligne' : '⚪ Hors ligne'}</div>
+        </div>
+        <div class="friend-actions">
+          <button class="friend-action-btn" title="Envoyer un message" onclick="openDmWithFriend('${escHtml(fname)}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <button class="friend-action-btn" title="Retirer" onclick="removeFriendDirect('${escHtml(fname)}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>`;
+    }
+  }
+
+  if (pending.length === 0 && friendUsernames.length === 0) {
+    html = '<div class="friends-empty">Aucun ami pour l\'instant.<br>Recherche quelqu\'un ci-dessus.</div>';
+  }
+
+  list.innerHTML = html;
+}
+
+async function acceptFriendReqDirect(reqId, requester) {
+  if (!currentUser) return;
+  await sbAcceptFriendRequest(reqId, requester, currentUser.username);
+  showToast(`✅ ${requester} est maintenant ton ami !`, '#34D399');
+  renderFriendsPanel();
+}
+async function declineFriendReqDirect(reqId) {
+  await sbDeclineFriendRequest(reqId);
+  showToast('Demande refusée.', '#F87171');
+  renderFriendsPanel();
+}
+async function removeFriendDirect(username) {
+  if (!currentUser) return;
+  await sbRemoveFriend(currentUser.username, username);
+  showToast(`👋 ${username} retiré de tes amis.`, '#FCD34D');
+  renderFriendsPanel();
+}
+async function openDmWithFriend(username) {
+  document.getElementById('friendsPanel')?.classList.remove('open');
+  friendsPanelOpen = false;
+  openMessagesPage(null, username);
+}
+
+document.getElementById('navFriendsBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  notifPanelOpen = false;
+  document.getElementById('notifPanel')?.classList.remove('open');
+  friendsPanelOpen = !friendsPanelOpen;
+  const fp = document.getElementById('friendsPanel');
+  fp?.classList.toggle('open', friendsPanelOpen);
+  if (friendsPanelOpen && currentUser) renderFriendsPanel();
+});
+
+// Friends search
+let friendsSearchDebounce = null;
+document.getElementById('friendsSearchInput')?.addEventListener('input', function () {
+  clearTimeout(friendsSearchDebounce);
+  const q = this.value.trim();
+  const resultEl = document.getElementById('friendsSearchResult');
+  if (!q || q.length < 2) { resultEl.style.display = 'none'; return; }
+  friendsSearchDebounce = setTimeout(async () => {
+    const users = await sbGetAllUsers(q);
+    const filtered = users.filter(u => currentUser && u.username !== currentUser.username).slice(0, 6);
+    if (filtered.length === 0) { resultEl.style.display = 'none'; return; }
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = filtered.map(u => {
+      return `<div class="friends-search-item">
+        <img class="friends-search-item-avatar" src="${escHtml(u.avatar || AVATAR_OPTIONS[0])}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+        <span class="friends-search-item-name">${escHtml(u.display_name || u.username)} <span style="color:var(--text-muted);font-size:0.7rem;">@${escHtml(u.username)}</span></span>
+        <button class="friends-search-item-btn" onclick="sendFriendReqFromSearch('${escHtml(u.username)}')">+ Ami</button>
+      </div>`;
+    }).join('');
+  }, 300);
+});
+
+async function sendFriendReqFromSearch(toUsername) {
+  if (!currentUser) { showToast('🔒 Connecte-toi d\'abord.', '#F87171'); return; }
+  if (toUsername === currentUser.username) { showToast('⚠️ Tu ne peux pas t\'ajouter toi-même.', '#F87171'); return; }
+  try {
+    const result = await sbSendFriendRequest(currentUser.username, toUsername);
+    if (result?.error === 'already_exists') {
+      showToast('⚠️ Demande déjà envoyée ou déjà ami.', '#FCD34D');
+    } else {
+      showToast(`📨 Demande envoyée à ${toUsername} !`, '#A78BFA');
+    }
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+  document.getElementById('friendsSearchResult').style.display = 'none';
+  document.getElementById('friendsSearchInput').value = '';
+}
+
+// ============================================================
+// MESSAGES PAGE UI
+// ============================================================
+let currentConvId = null;
+let msgPollingInterval = null;
+let savedGifsCache = [];
+const TENOR_API_KEY = 'AIzaSyC3cVCDv5KVZEZ1c9T1p6Xne5vUxO3vn8c'; // Tenor v1 API key (public demo)
+
+async function openMessagesPage(convId = null, withUsername = null) {
+  const page = document.getElementById('msgPage');
+  page.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (currentUser) {
+    savedGifsCache = await sbGetSavedGifs(currentUser.username);
+  }
+  await renderConversationList();
+  if (convId) {
+    openConversation(convId);
+  } else if (withUsername) {
+    // Open or create DM
+    try {
+      const conv = await sbGetOrCreateConversation([currentUser.username, withUsername]);
+      await renderConversationList();
+      openConversation(conv.id);
+    } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+  }
+}
+
+document.getElementById('msgPageBack')?.addEventListener('click', () => {
+  document.getElementById('msgPage').classList.remove('open');
+  document.body.style.overflow = '';
+  clearInterval(msgPollingInterval);
+  currentConvId = null;
+});
+
+document.getElementById('navMsgBtn')?.addEventListener('click', () => {
+  if (!currentUser) { showToast('🔒 Connecte-toi pour accéder aux messages.', '#F87171'); return; }
+  openMessagesPage();
+});
+document.getElementById('msgNewConvBtn')?.addEventListener('click', openNewConvModal);
+document.getElementById('msgSidebarAddBtn')?.addEventListener('click', openNewConvModal);
+
+async function renderConversationList() {
+  if (!currentUser) return;
+  const convs = await sbGetConversations(currentUser.username);
+  const list = document.getElementById('msgConvList');
+  const searchVal = document.getElementById('msgConvSearch')?.value.toLowerCase() || '';
+
+  const filtered = convs.filter(c => {
+    if (c.is_pending && c.creator !== currentUser.username) return false; // Only show pending if you sent it
+    const name = getConvDisplayName(c);
+    return !searchVal || name.toLowerCase().includes(searchVal);
+  });
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="msg-empty-sidebar">Aucune conversation.<br>Clique sur "+" pour commencer.</div>';
+    return;
+  }
+
+  // Get last message previews
+  const items = await Promise.all(filtered.map(async c => {
+    const msgs = await sbGetMessages(c.id);
+    const last = msgs[msgs.length - 1];
+    const name = getConvDisplayName(c);
+    const isGroup = !!c.group_name;
+    const otherUser = !isGroup ? c.participants.find(p => p !== currentUser.username) : null;
+    let avatarHtml = '';
+    if (isGroup) {
+      avatarHtml = `<div class="msg-conv-group-icon">👥</div>`;
+    } else {
+      const u = await sbGetUser(otherUser);
+      const av = u?.avatar || AVATAR_OPTIONS[0];
+      const online = u ? isOnline(u) : false;
+      avatarHtml = `<div class="msg-conv-avatar-wrap"><img class="msg-conv-avatar" src="${escHtml(av)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+        ${online ? '<div class="msg-conv-online"></div>' : ''}</div>`;
+    }
+    const previewText = last ? (last.type === 'gif' ? '🖼️ GIF' : last.content.substring(0, 60)) : 'Aucun message';
+    const active = currentConvId === c.id ? ' active' : '';
+    return { id: c.id, html: `<div class="msg-conv-item${active}" onclick="openConversation('${c.id}')">
+      ${avatarHtml}
+      <div class="msg-conv-body">
+        <div class="msg-conv-name">${escHtml(name)}</div>
+        <div class="msg-conv-preview">${escHtml(previewText)}</div>
+      </div>
+      <div class="msg-conv-meta">
+        <span class="msg-conv-time">${last ? timeAgo(last.created_at) : ''}</span>
+        ${c.is_pending ? '<span class="muted-badge">En attente</span>' : ''}
+      </div>
+    </div>` };
+  }));
+
+  list.innerHTML = items.map(i => i.html).join('');
+}
+
+document.getElementById('msgConvSearch')?.addEventListener('input', renderConversationList);
+
+function getConvDisplayName(conv) {
+  if (conv.group_name) return conv.group_name;
+  const other = conv.participants?.find(p => p !== currentUser?.username);
+  return other || 'Inconnu';
+}
+
+async function openConversation(convId) {
+  currentConvId = convId;
+  const conv = await sbGetConversation(convId);
+  if (!conv) return;
+
+  // Mark active in sidebar
+  document.querySelectorAll('.msg-conv-item').forEach(el => el.classList.remove('active'));
+  document.querySelector(`.msg-conv-item[onclick="openConversation('${convId}')"]`)?.classList.add('active');
+
+  // Show chat area
+  document.getElementById('msgMainEmpty').style.display = 'none';
+  const chatArea = document.getElementById('msgChatArea');
+  chatArea.style.display = 'flex';
+  chatArea.style.flexDirection = 'column';
+  chatArea.style.flex = '1';
+  chatArea.style.overflow = 'hidden';
+
+  const isGroup = !!conv.group_name;
+
+  // Build header
+  const headerAvatar = document.getElementById('msgChatHeaderAvatar');
+  const headerName = document.getElementById('msgChatHeaderName');
+  const headerSub = document.getElementById('msgChatHeaderSub');
+  const membersBtn = document.getElementById('msgChatMembersBtn');
+
+  if (isGroup) {
+    headerAvatar.innerHTML = `<div class="msg-chat-header-group-icon">👥</div>`;
+    headerName.textContent = conv.group_name;
+    headerSub.textContent = `${conv.participants.length} membres`;
+    membersBtn.style.display = 'flex';
+    // Only show group panel if creator
+    if (conv.creator === currentUser?.username) {
+      document.getElementById('groupMembersPanel').classList.add('open');
+      renderGroupMembers(conv);
+    }
+  } else {
+    const otherUsername = conv.participants.find(p => p !== currentUser?.username);
+    const u = otherUsername ? await sbGetUser(otherUsername) : null;
+    const av = u?.avatar || AVATAR_OPTIONS[0];
+    headerAvatar.innerHTML = `<img class="msg-chat-header-avatar" src="${escHtml(av)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">`;
+    headerName.textContent = u?.display_name || otherUsername || 'Inconnu';
+    const online = u ? isOnline(u) : false;
+    headerSub.textContent = online ? '🟢 En ligne' : '⚪ Hors ligne';
+    membersBtn.style.display = 'none';
+    document.getElementById('groupMembersPanel').classList.remove('open');
+  }
+
+  // Input zone avatar
+  if (currentUser) {
+    document.getElementById('msgInputAvatar').src = currentUser.avatar || AVATAR_OPTIONS[0];
+    document.getElementById('msgInputPseudo').textContent = currentUser.display_name || currentUser.username;
+  }
+
+  await renderMessages(convId);
+
+  // Setup polling
+  clearInterval(msgPollingInterval);
+  msgPollingInterval = setInterval(() => renderMessages(convId), 3000);
+}
+
+async function renderMessages(convId) {
+  if (convId !== currentConvId) return;
+  const msgs = await sbGetMessages(convId);
+  const area = document.getElementById('msgMessagesArea');
+  if (!area) return;
+
+  // Group messages by sender & proximity
+  let html = '';
+  let lastDate = '';
+  let lastSender = '';
+  let groupOpen = false;
+
+  for (let i = 0; i < msgs.length; i++) {
+    const m = msgs[i];
+    const d = new Date(m.created_at);
+    const dateStr = d.toLocaleDateString('fr');
+    if (dateStr !== lastDate) {
+      if (groupOpen) { html += '</div>'; groupOpen = false; }
+      lastDate = dateStr;
+      lastSender = '';
+      html += `<div class="msg-date-separator">${dateStr}</div>`;
+    }
+    const isMine = m.sender_username === currentUser?.username;
+    const sameAsPrev = m.sender_username === lastSender;
+    if (!sameAsPrev || msgs[i - 1]?.sender_username !== m.sender_username) {
+      if (groupOpen) html += '</div>';
+      html += `<div class="msg-bubble-group${isMine ? ' mine' : ''}">
+        <img class="msg-bubble-avatar" src="${escHtml(m.sender_avatar || AVATAR_OPTIONS[0])}" title="${escHtml(m.sender_username)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+        <div class="msg-bubble-stack">
+          ${!isMine && !sameAsPrev ? `<div class="msg-bubble-sender">${escHtml(m.sender_display || m.sender_username)}</div>` : ''}`;
+      groupOpen = true;
+      lastSender = m.sender_username;
+    }
+
+    if (m.type === 'gif') {
+      const isSaved = savedGifsCache.includes(m.content);
+      html += `<div class="msg-bubble gif-bubble">
+        <div class="msg-gif-wrap">
+          <img class="msg-gif-img" src="${escHtml(m.content)}" alt="GIF" loading="lazy">
+          <button class="msg-gif-save-btn${isSaved ? ' saved' : ''}" onclick="toggleSaveGif('${escHtml(m.content)}', this)" title="${isSaved ? 'Retirer des favoris' : 'Sauvegarder'}">★</button>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="msg-bubble${isMine ? ' mine' : ''}">${escHtml(m.content)}</div>`;
+    }
+  }
+  if (groupOpen) {
+    html += `<div class="msg-bubble-time">${new Date(msgs[msgs.length - 1]?.created_at).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })}</div></div></div>`;
+  }
+
+  area.innerHTML = html || '<div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:2rem;">Aucun message. Dis bonjour ! 👋</div>';
+  area.scrollTop = area.scrollHeight;
+}
+
+async function toggleSaveGif(url, btn) {
+  if (!currentUser) return;
+  const isSaved = savedGifsCache.includes(url);
+  if (isSaved) {
+    savedGifsCache = savedGifsCache.filter(g => g !== url);
+    await sbUnsaveFavoriteGif(currentUser.username, url);
+    btn.classList.remove('saved');
+    showToast('GIF retiré des favoris.', '#FCD34D');
+  } else {
+    savedGifsCache.push(url);
+    await sbSaveFavoriteGif(currentUser.username, url);
+    btn.classList.add('saved');
+    showToast('⭐ GIF sauvegardé !', '#FCD34D');
+  }
+}
+
+// Send message
+document.getElementById('msgSendBtn')?.addEventListener('click', sendMessage);
+document.getElementById('msgTextbox')?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+
+async function sendMessage() {
+  if (!currentUser || !currentConvId) return;
+  const tb = document.getElementById('msgTextbox');
+  const content = tb.value.trim();
+  if (!content) return;
+  tb.value = '';
+  tb.style.height = 'auto';
+  try {
+    await sbSendMessage(currentConvId, content, 'text');
+    await renderMessages(currentConvId);
+    await renderConversationList();
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+}
+
+// Auto-resize textbox
+document.getElementById('msgTextbox')?.addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 140) + 'px';
+});
+
+// Leave / close conversation
+document.getElementById('msgChatLeaveBtn')?.addEventListener('click', async () => {
+  if (!currentConvId || !currentUser) return;
+  const conv = await sbGetConversation(currentConvId);
+  if (!conv) return;
+  const isGroup = !!conv.group_name;
+  if (isGroup) {
+    if (!confirm('Quitter ce groupe ?')) return;
+    await sbLeaveConversation(currentConvId, currentUser.username);
+    showToast('Tu as quitté le groupe.', '#FCD34D');
+  }
+  currentConvId = null;
+  clearInterval(msgPollingInterval);
+  document.getElementById('msgChatArea').style.display = 'none';
+  document.getElementById('msgMainEmpty').style.display = 'flex';
+  document.getElementById('groupMembersPanel').classList.remove('open');
+  await renderConversationList();
+});
+
+// Group members
+async function renderGroupMembers(conv) {
+  if (!conv || !currentUser) return;
+  const panel = document.getElementById('groupMembersList');
+  if (!panel) return;
+  const isCreator = conv.creator === currentUser.username;
+  const mutedData = conv.muted_members || [];
+
+  const items = await Promise.all(conv.participants.map(async p => {
+    const u = await sbGetUser(p);
+    if (!u) return '';
+    const isOwner = p === conv.creator;
+    const mutedEntry = mutedData.find(m => m.username === p);
+    const isMuted = mutedEntry && new Date(mutedEntry.until) > new Date();
+    return `<div class="group-member-item">
+      <img class="group-member-avatar" src="${escHtml(u.avatar || AVATAR_OPTIONS[0])}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+      <div class="group-member-name">${escHtml(u.display_name || u.username)}</div>
+      ${isOwner ? '<span class="group-member-role">👑</span>' : ''}
+      ${isMuted ? '<span class="muted-badge">Mute</span>' : ''}
+      ${isCreator && !isOwner ? `<div class="group-member-actions">
+        <button class="group-member-action" title="Kick" onclick="kickGroupMember('${escHtml(conv.id)}','${escHtml(p)}')">🚪</button>
+        <button class="group-member-action" title="Mute 1h" onclick="muteGroupMember('${escHtml(conv.id)}','${escHtml(p)}',3600000)">🔇</button>
+      </div>` : ''}
+    </div>`;
+  }));
+  panel.innerHTML = items.join('');
+}
+
+document.getElementById('msgChatMembersBtn')?.addEventListener('click', async () => {
+  const panel = document.getElementById('groupMembersPanel');
+  const isOpen = panel.classList.toggle('open');
+  if (isOpen && currentConvId) {
+    const conv = await sbGetConversation(currentConvId);
+    if (conv) renderGroupMembers(conv);
+  }
+});
+
+async function kickGroupMember(convId, username) {
+  await sbKickFromGroup(convId, username);
+  showToast(`🚪 ${username} a été kické.`, '#F87171');
+  const conv = await sbGetConversation(convId);
+  if (conv) renderGroupMembers(conv);
+}
+async function muteGroupMember(convId, username, dur) {
+  await sbMuteInGroup(convId, username, dur);
+  showToast(`🔇 ${username} est mute pour 1h.`, '#FCD34D');
+  const conv = await sbGetConversation(convId);
+  if (conv) renderGroupMembers(conv);
+}
+
+// ============================================================
+// EMOJI PICKER
+// ============================================================
+const EMOJIS = ['😀','😂','😍','🥰','😎','🤔','😢','😡','🔥','💯','👍','👎','❤️','💜','✨','🎉','💀','😈','🤡','👀','🙏','🤝','💪','🚀','⚡','🎮','📜','🛡️','⚔️','🔮','🌙','⭐','💫','🌊','🎯','💎','🔑','👑','🤖','👾'];
+const emojiPanel = document.getElementById('emojiPickerPanel');
+if (emojiPanel) {
+  emojiPanel.innerHTML = EMOJIS.map(e => `<button class="emoji-btn-item" onclick="insertEmoji('${e}')">${e}</button>`).join('');
+}
+document.getElementById('msgEmojiBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('gifPickerPanel')?.classList.remove('open');
+  emojiPanel?.classList.toggle('open');
+});
+function insertEmoji(emoji) {
+  const tb = document.getElementById('msgTextbox');
+  if (tb) {
+    tb.value += emoji;
+    tb.focus();
+  }
+  emojiPanel?.classList.remove('open');
+}
+
+// ============================================================
+// GIF PICKER
+// ============================================================
+let gifSearchDebounce = null;
+document.getElementById('msgGifBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  emojiPanel?.classList.remove('open');
+  const gifPanel = document.getElementById('gifPickerPanel');
+  const wasOpen = gifPanel?.classList.contains('open');
+  gifPanel?.classList.toggle('open');
+  if (!wasOpen) loadTrendingGifs();
+});
+
+async function loadTrendingGifs() {
+  const grid = document.getElementById('gifGrid');
+  if (!grid) return;
+  grid.innerHTML = '<div class="gif-loading">Chargement...</div>';
+  // Show saved GIFs first
+  let savedHtml = '';
+  if (currentUser && savedGifsCache.length > 0) {
+    savedHtml = `<div class="gif-saved-label" style="grid-column:1/-1;">⭐ Mes GIFs sauvegardés</div>`;
+    savedHtml += savedGifsCache.slice(0, 4).map(url =>
+      `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
+    ).join('');
+    savedHtml += `<div class="gif-saved-label" style="grid-column:1/-1;">🔥 Tendances</div>`;
+  }
+  try {
+    const resp = await fetch(`https://tenor.googleapis.com/v2/featured?key=${TENOR_API_KEY}&limit=12&media_filter=gif&contentfilter=medium`);
+    const data = await resp.json();
+    const gifs = (data.results || []).map(r => r.media_formats?.gif?.url || r.media_formats?.tinygif?.url).filter(Boolean);
+    if (gifs.length === 0) { grid.innerHTML = savedHtml + '<div class="gif-loading">Aucun GIF trouvé</div>'; return; }
+    grid.innerHTML = savedHtml + gifs.map(url =>
+      `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
+    ).join('');
+  } catch (e) {
+    // Fallback GIFs from giphy public
+    const fallbackGifs = [
+      'https://media.giphy.com/media/xT9IgG50Lg7rusRgqA/giphy.gif',
+      'https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif',
+      'https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif',
+      'https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif',
+      'https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif',
+      'https://media.giphy.com/media/3oxHQCI8tKXoeW4IBq/giphy.gif',
+    ];
+    grid.innerHTML = savedHtml + fallbackGifs.map(url =>
+      `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
+    ).join('');
+  }
+}
+
+document.getElementById('gifSearchInput')?.addEventListener('input', function () {
+  clearTimeout(gifSearchDebounce);
+  const q = this.value.trim();
+  if (!q) { loadTrendingGifs(); return; }
+  gifSearchDebounce = setTimeout(async () => {
+    const grid = document.getElementById('gifGrid');
+    if (!grid) return;
+    grid.innerHTML = '<div class="gif-loading">Recherche...</div>';
+    try {
+      const resp = await fetch(`https://tenor.googleapis.com/v2/search?key=${TENOR_API_KEY}&q=${encodeURIComponent(q)}&limit=12&media_filter=gif&contentfilter=medium`);
+      const data = await resp.json();
+      const gifs = (data.results || []).map(r => r.media_formats?.gif?.url || r.media_formats?.tinygif?.url).filter(Boolean);
+      if (gifs.length === 0) { grid.innerHTML = '<div class="gif-loading">Aucun GIF trouvé</div>'; return; }
+      grid.innerHTML = gifs.map(url =>
+        `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
+      ).join('');
+    } catch (e) {
+      grid.innerHTML = '<div class="gif-loading">Erreur de recherche.</div>';
+    }
+  }, 400);
+});
+
+async function sendGif(url) {
+  if (!currentUser || !currentConvId) return;
+  document.getElementById('gifPickerPanel')?.classList.remove('open');
+  try {
+    await sbSendMessage(currentConvId, url, 'gif');
+    await renderMessages(currentConvId);
+    await renderConversationList();
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+}
+
+// Close pickers on outside click
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#msgEmojiBtn') && !e.target.closest('#emojiPickerPanel')) {
+    emojiPanel?.classList.remove('open');
+  }
+  if (!e.target.closest('#msgGifBtn') && !e.target.closest('#gifPickerPanel')) {
+    document.getElementById('gifPickerPanel')?.classList.remove('open');
+  }
+  if (!e.target.closest('#navNotifBtn') && !e.target.closest('#notifPanel')) {
+    document.getElementById('notifPanel')?.classList.remove('open');
+    notifPanelOpen = false;
+  }
+  if (!e.target.closest('#navFriendsBtn') && !e.target.closest('#friendsPanel')) {
+    document.getElementById('friendsPanel')?.classList.remove('open');
+    friendsPanelOpen = false;
+  }
+});
+
+// ============================================================
+// NEW CONVERSATION MODAL
+// ============================================================
+function openNewConvModal() {
+  if (!currentUser) { showToast('🔒 Connecte-toi pour envoyer des messages.', '#F87171'); return; }
+  document.getElementById('newConvOverlay').classList.add('open');
+}
+document.getElementById('newConvClose')?.addEventListener('click', () => {
+  document.getElementById('newConvOverlay').classList.remove('open');
+});
+document.getElementById('newConvOverlay')?.addEventListener('click', (e) => {
+  if (e.target === document.getElementById('newConvOverlay')) {
+    document.getElementById('newConvOverlay').classList.remove('open');
+  }
+});
+
+// Tab switching in new conv modal
+document.querySelectorAll('.new-conv-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.new-conv-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const which = tab.dataset.nctab;
+    document.getElementById('ncTabDmContent').style.display = which === 'dm' ? 'block' : 'none';
+    document.getElementById('ncTabGroupContent').style.display = which === 'group' ? 'block' : 'none';
+  });
+});
+
+// DM search
+let ncDmSearchDebounce = null;
+document.getElementById('ncDmUsername')?.addEventListener('input', function () {
+  clearTimeout(ncDmSearchDebounce);
+  const q = this.value.trim();
+  const res = document.getElementById('ncDmResults');
+  if (!q || q.length < 2) { res.style.display = 'none'; return; }
+  ncDmSearchDebounce = setTimeout(async () => {
+    const users = await sbGetAllUsers(q);
+    const filtered = users.filter(u => u.username !== currentUser?.username).slice(0, 5);
+    if (filtered.length === 0) { res.style.display = 'none'; return; }
+    res.style.display = 'block';
+    res.innerHTML = filtered.map(u => `<div class="new-conv-user-item">
+      <img src="${escHtml(u.avatar || AVATAR_OPTIONS[0])}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+      <span>${escHtml(u.display_name || u.username)} <span style="color:var(--text-muted);font-size:0.7rem;">@${escHtml(u.username)}</span></span>
+      <button class="add-btn" onclick="ncSelectDmUser('${escHtml(u.username)}')">Sélectionner</button>
+    </div>`).join('');
+  }, 300);
+});
+function ncSelectDmUser(username) {
+  document.getElementById('ncDmUsername').value = username;
+  document.getElementById('ncDmResults').style.display = 'none';
+}
+
+// Send DM (non-friend)
+document.getElementById('ncDmSendBtn')?.addEventListener('click', async () => {
+  const toUsername = document.getElementById('ncDmUsername').value.trim();
+  const msg = document.getElementById('ncDmMessage').value.trim();
+  if (!toUsername) { showToast('⚠️ Entre un nom d\'utilisateur.', '#F87171'); return; }
+  if (!currentUser) return;
+  try {
+    const isFriend = friendsCache.includes(toUsername);
+    let conv;
+    if (isFriend) {
+      conv = await sbGetOrCreateConversation([currentUser.username, toUsername]);
+    } else {
+      conv = await sbSendInboxMessage(toUsername, msg || `${currentUser.display_name || currentUser.username} t'a envoyé un message.`);
+    }
+    document.getElementById('newConvOverlay').classList.remove('open');
+    showToast('💬 Message envoyé !', '#34D399');
+    await openMessagesPage(conv.id);
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+});
+
+// Group creation
+let ncGroupSelected = [];
+let ncGroupSearchDebounce = null;
+document.getElementById('ncGroupSearch')?.addEventListener('input', function () {
+  clearTimeout(ncGroupSearchDebounce);
+  const q = this.value.trim();
+  const res = document.getElementById('ncGroupResults');
+  if (!q || q.length < 2) { res.style.display = 'none'; return; }
+  ncGroupSearchDebounce = setTimeout(async () => {
+    const users = await sbGetAllUsers(q);
+    const filtered = users.filter(u => u.username !== currentUser?.username && !ncGroupSelected.includes(u.username)).slice(0, 6);
+    if (filtered.length === 0) { res.style.display = 'none'; return; }
+    res.style.display = 'block';
+    res.innerHTML = filtered.map(u => `<div class="new-conv-user-item">
+      <img src="${escHtml(u.avatar || AVATAR_OPTIONS[0])}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
+      <span>${escHtml(u.display_name || u.username)}</span>
+      <button class="add-btn" onclick="ncAddGroupMember('${escHtml(u.username)}')">Ajouter</button>
+    </div>`).join('');
+  }, 300);
+});
+function ncAddGroupMember(username) {
+  if (!ncGroupSelected.includes(username)) ncGroupSelected.push(username);
+  document.getElementById('ncGroupResults').style.display = 'none';
+  document.getElementById('ncGroupSearch').value = '';
+  renderNcGroupSelected();
+}
+function ncRemoveGroupMember(username) {
+  ncGroupSelected = ncGroupSelected.filter(u => u !== username);
+  renderNcGroupSelected();
+}
+function renderNcGroupSelected() {
+  const el = document.getElementById('ncGroupSelected');
+  if (!el) return;
+  el.innerHTML = ncGroupSelected.map(u =>
+    `<div class="new-conv-tag">${escHtml(u)} <button onclick="ncRemoveGroupMember('${escHtml(u)}')">×</button></div>`
+  ).join('');
+}
+document.getElementById('ncGroupCreateBtn')?.addEventListener('click', async () => {
+  const name = document.getElementById('ncGroupName').value.trim();
+  if (!name) { showToast('⚠️ Donne un nom au groupe.', '#F87171'); return; }
+  if (!currentUser) return;
+  if (ncGroupSelected.length === 0) { showToast('⚠️ Ajoute au moins un membre.', '#F87171'); return; }
+  try {
+    const participants = [currentUser.username, ...ncGroupSelected];
+    const conv = await sbGetOrCreateConversation(participants, name);
+    ncGroupSelected = [];
+    renderNcGroupSelected();
+    document.getElementById('newConvOverlay').classList.remove('open');
+    showToast(`✅ Groupe "${name}" créé !`, '#34D399');
+    await openMessagesPage(conv.id);
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+});
+
+// ============================================================
+// UPDATE AUTH UI — extend to show/hide social zone
+// ============================================================
+const _origUpdateAuthUI = typeof updateAuthUI !== 'undefined' ? updateAuthUI : null;
+
+// ============================================================
+// NOTIFICATIONS — admin sees votes
+// ============================================================
+async function checkAdminNotifications() {
+  if (!currentUser || !isAdmin(currentUser)) return;
+  // For admins: add vote notifications to the notif feed
+  // We'll push them as a specific type when votes happen
+  // This is done via the normal notification system
+}
+
+// ============================================================
+// NOTIFICATIONS — new script notification for all users
+// ============================================================
+async function notifyNewScript(scriptName, scriptId) {
+  // Called when admin adds a script
+  if (!currentUser) return;
+  const users = await sbGetAllUsers('');
+  for (const u of users) {
+    if (u.username === currentUser.username) continue;
+    await sbCreateNotification(u.username, {
+      type: 'new_script',
+      from_username: currentUser.username,
+      text: `📜 Nouveau script disponible : <strong>${escHtml(scriptName)}</strong>`,
+      data: { script_id: scriptId }
+    });
+  }
+}
+
+// ============================================================
+// VOTE NOTIFICATION (admin sees who liked what)
+// ============================================================
+async function notifyVoteForAdmin(voterUsername, scriptName, voteType) {
+  // Notify all admins
+  const allUsers = await sbGetAllUsers('');
+  for (const u of allUsers) {
+    if (!isAdmin(u) && getPermLevel(u) < 5) continue;
+    await sbCreateNotification(u.username, {
+      type: 'vote_on_script',
+      from_username: voterUsername,
+      text: `<strong>${escHtml(voterUsername)}</strong> a ${voteType === 'like' ? '👍 aimé' : '👎 disliké'} le script <strong>${escHtml(scriptName)}</strong>`,
+      data: { voter: voterUsername, script: scriptName, vote: voteType }
+    });
+  }
+}
+
+// ============================================================
+// MSG BADGE COUNT
+// ============================================================
+async function updateMsgBadge() {
+  if (!currentUser) return;
+  const convs = await sbGetConversations(currentUser.username);
+  // Count conversations with unread messages (pending or has messages not yet seen)
+  // Simple: show badge if there are pending inbox DMs
+  const pending = convs.filter(c => c.is_pending && c.creator !== currentUser.username);
+  const badge = document.getElementById('navMsgBadge');
+  if (!badge) return;
+  if (pending.length > 0) {
+    badge.textContent = pending.length > 9 ? '9+' : pending.length;
+    badge.classList.add('visible');
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
+// Patch the init / updateAuthUI to show social buttons
+function updateSocialZone() {
+  const zone = document.getElementById('navSocialZone');
+  if (zone) zone.style.display = currentUser ? 'flex' : 'none';
+  if (currentUser) {
+    loadAndRenderNotifications();
+    updateMsgBadge();
+    renderFriendsPanel();
+  }
 }
 
 init();
