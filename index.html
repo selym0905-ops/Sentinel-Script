@@ -16,30 +16,64 @@
   body.theme-dark { --bg:#000000;--surface:#0a0a0a;--border:rgba(255,255,255,0.07);--text:#F8FAFC;--text-muted:#64748B;--text-dim:#334155; }
   body.theme-light { --bg:#f8fafc;--surface:#ffffff;--border:rgba(0,0,0,0.08);--text:#0f172a;--text-muted:#475569;--text-dim:#94a3b8;--purple:#8b5cf6;--purple-light:#7c3aed; }
   body.theme-midnight { --bg:#0d0d1a;--surface:#12122a;--border:rgba(80,60,200,0.15);--text:#d4d8ff;--text-muted:#5a5080;--text-dim:#2a2850;--purple:#6644ee;--purple-light:#aa88ff;--blue:#3344cc;--cyan:#2299dd; }
-  body.theme-nexus { --bg:#000000;--surface:#080808;--border:rgba(255,255,255,0.06);--text:#ffffff;--text-muted:#555555;--text-dim:#222222;--purple:#7C3AED;--purple-light:#A78BFA;--blue:#2563EB;--cyan:#06B6D4; }
+  body.theme-nexus { --bg:#000000;--surface:#111114;--border:rgba(255,255,255,0.12);--text:#ffffff;--text-muted:#9a9aa6;--text-dim:#3a3a44;--purple:#7C3AED;--purple-light:#A78BFA;--blue:#2563EB;--cyan:#06B6D4; }
 
   #starfield { display:none;position:fixed;inset:0;z-index:0;pointer-events:none; }
   body.theme-midnight #starfield { display:block; }
   #nexus-grid { display:none;position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.5; }
   body.theme-nexus #nexus-grid { display:block; }
+  #nexus-grid-glow {
+    display:none;position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.9;
+    -webkit-mask-image: radial-gradient(circle 200px at var(--ngx,50%) var(--ngy,50%), black 0%, transparent 75%);
+    mask-image: radial-gradient(circle 200px at var(--ngx,50%) var(--ngy,50%), black 0%, transparent 75%);
+    transition: opacity .3s;
+  }
+  body.theme-nexus #nexus-grid-glow { display:block; }
 
   html { scroll-behavior:smooth; }
   body { background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden;cursor:none;transition:background 0.4s,color 0.3s; }
 
   /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
-  * { scrollbar-width: thin; scrollbar-color: var(--purple) var(--bg); }
+  ::-webkit-scrollbar { width: 7px; height: 7px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.45); border-radius: 999px; border:2px solid transparent; background-clip:padding-box; transition:background 0.2s; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(167,139,250,0.7); background-clip:padding-box; }
+  * { scrollbar-width: thin; scrollbar-color: rgba(124,58,237,0.45) transparent; scroll-behavior:smooth; }
 
   body::after { content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,58,237,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0; }
   body.theme-light::after { background-image:linear-gradient(rgba(124,58,237,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,58,237,0.04) 1px,transparent 1px); }
   body.theme-nexus::after { display:none; }
 
-  .cursor { position:fixed;width:12px;height:12px;background:var(--purple-light);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s; }
-  .cursor-ring { position:fixed;width:36px;height:36px;border:1px solid rgba(124,58,237,0.5);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%); }
+  .cursor { position:fixed;width:12px;height:12px;background:var(--purple-light);border-radius:50%;pointer-events:none;z-index:2147483647;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s; }
+  .cursor-ring { position:fixed;width:36px;height:36px;border:1px solid rgba(124,58,237,0.5);border-radius:50%;pointer-events:none;z-index:2147483646;transform:translate(-50%,-50%); }
   .cursor-light { position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.14) 0%,rgba(37,99,235,0.06) 35%,transparent 65%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);will-change:left,top; }
+  /* Cursor style variants */
+  body.cursor-aurora .cursor { background:#22D3EE;box-shadow:0 0 12px 3px rgba(34,211,238,0.85); }
+  body.cursor-aurora .cursor-ring { border-color:rgba(34,211,238,0.7);box-shadow:0 0 16px rgba(34,211,238,0.35); }
+  body.cursor-aurora .cursor-light { background:radial-gradient(circle,rgba(34,211,238,0.16) 0%,rgba(6,182,212,0.07) 35%,transparent 65%); }
+  body.cursor-minimal .cursor { width:7px;height:7px;background:#fff;mix-blend-mode:normal; }
+  body.cursor-minimal .cursor-ring { display:none; }
+  body.cursor-minimal .cursor-light { opacity:0.35; }
+  @keyframes cursorSpin { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
+  body.cursor-comet .cursor { width:13px;height:13px;background:#FB923C;clip-path:polygon(50% 0%,85% 50%,50% 100%,15% 50%);box-shadow:-14px 2px 16px -2px rgba(251,146,60,0.55),-26px 4px 14px -4px rgba(251,146,60,0.25);mix-blend-mode:normal; }
+  body.cursor-comet .cursor-ring { width:30px;height:30px;border:2px solid transparent;border-top-color:rgba(251,146,60,0.7);border-right-color:rgba(251,146,60,0.35);box-shadow:0 0 12px rgba(251,146,60,0.25);animation:cursorSpin 2.4s linear infinite; }
+  body.cursor-comet .cursor-light { background:radial-gradient(circle,rgba(251,146,60,0.15) 0%,rgba(234,88,12,0.06) 35%,transparent 65%); }
+  body.cursor-prism .cursor { width:11px;height:11px;background:#34D399;border-radius:3px;box-shadow:0 0 10px rgba(52,211,153,0.65);transform:translate(-50%,-50%) rotate(45deg);mix-blend-mode:normal; }
+  body.cursor-prism .cursor-ring { width:28px;height:28px;border:1.5px solid rgba(52,211,153,0.55);border-radius:6px;transform:translate(-50%,-50%) rotate(45deg);animation:cursorSpin 6s linear infinite; }
+  body.cursor-prism .cursor-light { background:radial-gradient(circle,rgba(52,211,153,0.15) 0%,rgba(16,185,129,0.06) 35%,transparent 65%); }
+  .wallpaper-layer { position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transition:opacity .4s;filter:blur(var(--wallpaper-blur,0px)); }
+  .wallpaper-layer.active { opacity:1; }
+  .wallpaper-layer.wallpaper-reveal { -webkit-mask-image:radial-gradient(circle 260px at var(--wpx,50%) var(--wpy,50%),rgba(0,0,0,1) 0%,rgba(0,0,0,0.35) 55%,rgba(0,0,0,0) 100%);mask-image:radial-gradient(circle 260px at var(--wpx,50%) var(--wpy,50%),rgba(0,0,0,1) 0%,rgba(0,0,0,0.35) 55%,rgba(0,0,0,0) 100%); }
+  .wallpaper-settings { display:flex;flex-direction:column;gap:0.6rem;padding:0.25rem 0.1rem; }
+  .wallpaper-row { display:flex;align-items:center;gap:0.5rem; }
+  .wallpaper-row .auth-input { padding:0.5rem 0.75rem;font-size:0.8rem; }
+  .wallpaper-upload-btn { display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:background .2s; }
+  .wallpaper-upload-btn:hover { background:rgba(124,58,237,0.18); }
+  .wallpaper-clear-btn { width:34px;height:34px;border-radius:8px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:#f87171;cursor:pointer;flex-shrink:0;transition:background .2s; }
+  .wallpaper-clear-btn:hover { background:rgba(248,113,113,0.2); }
+  .wallpaper-slider-row { font-size:0.78rem;color:var(--text-muted); }
+  .wallpaper-slider-row input[type=range] { flex:1;accent-color:#A78BFA; }
+  .wallpaper-toggle-row { justify-content:space-between;font-size:0.78rem;color:var(--text-muted); }
   .wrapper { position:relative;z-index:2; }
 
   nav { position:fixed;top:0;left:0;right:0;z-index:500;padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background 0.3s; }
@@ -188,7 +222,7 @@
   .filter-btn:hover,.filter-btn.active { background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.35);color:var(--purple-light); }
   .filter-btn.active { box-shadow:0 0 12px rgba(124,58,237,0.15); }
 
-  .cards-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem; }
+  .cards-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;overflow:hidden;transition:height 0.35s cubic-bezier(.4,0,.2,1); }
   .card { background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;position:relative;overflow:hidden;cursor:none;will-change:transform;transition:border-color .3s,box-shadow .3s,background .2s; }
   .card.hidden { display:none; }
   @keyframes cardAppear { 0%{opacity:0;transform:translateY(18px) scale(0.96);} 100%{opacity:1;transform:translateY(0) scale(1);} }
@@ -201,6 +235,11 @@
   .card-category { font-size:0.67rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;padding:0.2rem 0.55rem;border-radius:4px;display:inline-block;margin-bottom:0.55rem; }
   .cat-game { background:rgba(16,185,129,0.12);color:#34D399;border:1px solid rgba(16,185,129,0.2); }
   .cat-util { background:rgba(6,182,212,0.12);color:#67E8F9;border:1px solid rgba(6,182,212,0.2); }
+  .card-origin { font-size:0.67rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;padding:0.2rem 0.55rem;border-radius:4px;display:inline-block;margin-bottom:0.55rem;margin-left:0.4rem; }
+  .origin-internal { background:rgba(167,139,250,0.14);color:#C4B5FD;border:1px solid rgba(167,139,250,0.3); }
+  .origin-external { background:rgba(148,163,184,0.12);color:#94A3B8;border:1px solid rgba(148,163,184,0.25); }
+  .cards-section-divider { grid-column:1 / -1;display:flex;align-items:center;gap:0.75rem;margin:0.5rem 0 0.25rem;color:var(--text-muted);font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em; }
+  .cards-section-divider::before, .cards-section-divider::after { content:'';flex:1;height:1px;background:var(--border); }
   .card-name { font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;color:var(--text);letter-spacing:-0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
   .card-status { display:flex;align-items:center;gap:0.35rem;font-size:0.7rem;color:var(--text-muted);white-space:nowrap;flex-shrink:0; }
   .status-dot { width:6px;height:6px;border-radius:50%;flex-shrink:0; }
@@ -253,6 +292,21 @@
 
   /* AUTH MODAL */
   .auth-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:10000;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;align-items:center;justify-content:center;padding:1rem; }
+
+  /* CUSTOM CONFIRM MODAL (replaces native browser confirm()) */
+  .cc-overlay { position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:20000;opacity:0;visibility:hidden;transition:opacity .2s,visibility .2s;display:flex;align-items:center;justify-content:center;padding:1rem; }
+  .cc-overlay.open { opacity:1;visibility:visible; }
+  .cc-box { width:100%;max-width:340px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.4rem 1.4rem 1.2rem;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:translateY(8px) scale(0.97);transition:transform .2s; }
+  .cc-overlay.open .cc-box { transform:translateY(0) scale(1); }
+  .cc-icon { width:42px;height:42px;border-radius:50%;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.3);display:flex;align-items:center;justify-content:center;font-size:1.15rem;margin-bottom:0.85rem; }
+  .cc-icon.neutral { background:rgba(124,58,237,0.12);border-color:rgba(124,58,237,0.3); }
+  .cc-title { font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.98rem;color:var(--text);margin-bottom:0.35rem; }
+  .cc-text { font-size:0.84rem;color:var(--text-muted);line-height:1.5;margin-bottom:1.2rem; }
+  .cc-actions { display:flex;gap:0.6rem;justify-content:flex-end; }
+  .cc-btn { padding:0.5rem 1rem;border-radius:9px;font-size:0.82rem;font-weight:600;cursor:none;border:1px solid var(--border);background:transparent;color:var(--text-muted);transition:all .15s;font-family:'Inter',sans-serif; }
+  .cc-btn:hover { border-color:rgba(255,255,255,0.2);color:var(--text); }
+  .cc-btn.cc-danger { background:rgba(248,113,113,0.15);border-color:rgba(248,113,113,0.4);color:#FCA5A5; }
+  .cc-btn.cc-danger:hover { background:rgba(248,113,113,0.28);box-shadow:0 0 12px rgba(248,113,113,0.25); }
   .auth-overlay.open { opacity:1;visibility:visible; }
   .auth-modal { background:#0d0d14;border:1px solid rgba(124,58,237,0.3);border-radius:18px;width:100%;max-width:420px;padding:2rem;transform:translateY(20px) scale(0.97);transition:transform .35s cubic-bezier(0.22,1,0.36,1);position:relative;max-height:90vh;overflow-y:auto; }
   body.theme-light .auth-modal { background:#fff; }
@@ -372,6 +426,13 @@
   .profile-close { position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;cursor:none;font-size:1rem;transition:all .2s; }
   .profile-close:hover { background:rgba(255,255,255,0.12);color:var(--text); }
   .profile-modal { position:relative; }
+  .profile-avatar-history { display:flex;gap:0.4rem;justify-content:center;margin:0.6rem 0 0.2rem;flex-wrap:wrap; }
+  .profile-avatar-history img { width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid var(--border);opacity:0.75;cursor:none;transition:all 0.15s; }
+  .profile-avatar-history img:hover { opacity:1;border-color:var(--purple-light);transform:scale(1.08); }
+  .profile-block-btn { display:flex;align-items:center;justify-content:center;gap:0.4rem;width:100%;margin-top:1rem;padding:0.55rem;border-radius:10px;font-size:0.78rem;font-weight:600;cursor:none;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.08);color:#F87171;transition:all 0.15s; }
+  .profile-block-btn:hover { background:rgba(239,68,68,0.18); }
+  .profile-block-btn.is-blocked { border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);color:#34D399; }
+  .profile-block-btn.is-blocked:hover { background:rgba(16,185,129,0.18); }
   .profile-avatar { width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid rgba(124,58,237,0.4);margin:0 auto 1rem;display:block; }
   .profile-name { font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--text);text-align:center; }
   .profile-username { font-size:0.85rem;color:var(--text-muted);text-align:center;font-family:'JetBrains Mono',monospace;margin-bottom:0.5rem; }
@@ -513,6 +574,23 @@
   .theme-option:hover { border-color:rgba(124,58,237,0.5);transform:scale(1.03); }
   .theme-option.selected { border-color:var(--purple-light); }
   .theme-option.selected::after { content:'✓';position:absolute;top:4px;right:4px;width:14px;height:14px;background:var(--purple-light);border-radius:50%;color:#000;font-size:0.55rem;font-weight:700;display:flex;align-items:center;justify-content:center; }
+  /* Cursor style picker (reuses theme-option look) */
+  .cursor-option { border-radius:10px;overflow:hidden;border:2px solid var(--border);cursor:none;transition:border-color .2s,transform .2s;position:relative; }
+  .cursor-option:hover { border-color:rgba(124,58,237,0.5);transform:scale(1.03); }
+  .cursor-option.selected { border-color:var(--purple-light); }
+  .cursor-option.selected::after { content:'✓';position:absolute;top:4px;right:4px;width:14px;height:14px;background:var(--purple-light);border-radius:50%;color:#000;font-size:0.55rem;font-weight:700;display:flex;align-items:center;justify-content:center; }
+  .cursor-preview { height:54px;background:#0d0d14;display:flex;align-items:center;justify-content:center;position:relative; }
+  .cursor-preview-dot { border-radius:50%;position:relative;z-index:1; }
+  .cursor-preview-ring { position:absolute;border-radius:50%; }
+  .cursor-preview-classic .cursor-preview-dot { width:8px;height:8px;background:#A78BFA; }
+  .cursor-preview-classic .cursor-preview-ring { width:24px;height:24px;border:1px solid rgba(124,58,237,0.5); }
+  .cursor-preview-aurora .cursor-preview-dot { width:8px;height:8px;background:#22D3EE;box-shadow:0 0 8px 2px rgba(34,211,238,0.8); }
+  .cursor-preview-aurora .cursor-preview-ring { width:24px;height:24px;border:1.5px solid rgba(34,211,238,0.7);box-shadow:0 0 10px rgba(34,211,238,0.4); }
+  .cursor-preview-minimal .cursor-preview-dot { width:6px;height:6px;background:#fff; }
+  .cursor-preview-comet .cursor-preview-dot { width:10px;height:10px;background:#FB923C;clip-path:polygon(50% 0%,85% 50%,50% 100%,15% 50%);box-shadow:-10px 1px 12px -2px rgba(251,146,60,0.55); }
+  .cursor-preview-comet .cursor-preview-ring { width:24px;height:24px;border:1.5px solid transparent;border-top-color:rgba(251,146,60,0.7);border-right-color:rgba(251,146,60,0.35); }
+  .cursor-preview-prism .cursor-preview-dot { width:9px;height:9px;background:#34D399;border-radius:3px;box-shadow:0 0 8px rgba(52,211,153,0.65);transform:rotate(45deg); }
+  .cursor-preview-prism .cursor-preview-ring { width:22px;height:22px;border:1.2px solid rgba(52,211,153,0.55);border-radius:5px;transform:rotate(45deg); }
   .theme-preview { height:60px;width:100%;display:block;position:relative;overflow:hidden; }
   .theme-preview-midnight { background:linear-gradient(160deg,#0d0d1a 0%,#1a1060 100%); }
   .theme-preview-midnight .star { position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0.8; }
@@ -524,6 +602,17 @@
   .theme-label { font-size:0.62rem;text-align:center;padding:0.3rem 0.2rem;color:var(--text-muted);font-weight:500;background:rgba(255,255,255,0.02); }
   .notif-coming { display:none;padding:0.75rem 1rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:10px;font-size:0.8rem;color:#FCD34D;margin-top:0.6rem;text-align:center; }
   .notif-coming.open { display:block;animation:fadeSlide .2s ease; }
+  .notif-pref-list { display:none;flex-direction:column;gap:0.6rem;margin-top:0.6rem;padding:0.85rem 1rem;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px; }
+  .notif-pref-list.open { display:flex;animation:fadeSlide .2s ease; }
+  .notif-pref-row { display:flex;align-items:center;justify-content:space-between;gap:0.75rem; }
+  .notif-pref-label { font-size:0.78rem;color:var(--text); }
+  .notif-pref-desc { font-size:0.65rem;color:var(--text-muted);margin-top:0.1rem; }
+  .notif-switch { position:relative;width:38px;height:22px;flex-shrink:0; }
+  .notif-switch input { opacity:0;width:0;height:0; }
+  .notif-switch-track { position:absolute;inset:0;background:rgba(255,255,255,0.1);border:1px solid var(--border);border-radius:999px;cursor:none;transition:background 0.2s; }
+  .notif-switch-track::before { content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:var(--text-muted);border-radius:50%;transition:transform 0.2s,background 0.2s; }
+  .notif-switch input:checked + .notif-switch-track { background:rgba(124,58,237,0.3);border-color:rgba(124,58,237,0.5); }
+  .notif-switch input:checked + .notif-switch-track::before { transform:translateX(16px);background:var(--purple-light); }
   .lang-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.45rem; }
   .lang-btn { display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.75rem;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:0.78rem;font-weight:500;cursor:none;transition:all .2s; }
   .lang-btn:hover { background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.3);color:var(--text); }
@@ -596,6 +685,35 @@
   .admin-select:focus { border-color:rgba(255,215,0,0.4); }
   .admin-select option { background:#0d0d14;color:var(--text); }
   body.theme-light .admin-select option { background:#fff;color:#0f172a; }
+  /* Custom dropdown (replaces native <select> in admin comment filter) */
+  .custom-select { position:relative;width:100%; }
+  .custom-select-trigger {
+    width:100%;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;
+    padding:0.55rem 0.85rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);
+    border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.85rem;
+    cursor:none;transition:all .2s;text-align:left;
+  }
+  .custom-select-trigger:hover, .custom-select.open .custom-select-trigger { border-color:rgba(255,215,0,0.4); }
+  .custom-select-trigger span { overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+  .custom-select-chevron { width:13px;height:13px;flex-shrink:0;color:var(--text-muted);transition:transform .25s cubic-bezier(.4,0,.2,1); }
+  .custom-select.open .custom-select-chevron { transform:rotate(180deg); }
+  .custom-select-menu {
+    position:absolute;top:calc(100% + 6px);left:0;right:0;z-index:50;
+    background:#0d0d14;border:1px solid rgba(255,215,0,0.25);border-radius:10px;
+    max-height:260px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,215,0,0.3) transparent;
+    box-shadow:0 12px 28px rgba(0,0,0,0.45);
+    opacity:0;visibility:hidden;transform:translateY(-6px) scale(0.98);transform-origin:top center;
+    transition:opacity .18s ease, transform .18s cubic-bezier(.34,1.4,.64,1), visibility .18s;
+    padding:0.35rem;
+  }
+  body.theme-light .custom-select-menu { background:#fff; }
+  .custom-select.open .custom-select-menu { opacity:1;visibility:visible;transform:translateY(0) scale(1); }
+  .custom-select-option {
+    padding:0.5rem 0.7rem;border-radius:7px;font-size:0.82rem;color:var(--text);
+    cursor:none;transition:background .15s; white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .custom-select-option:hover { background:rgba(255,215,0,0.1); }
+  .custom-select-option.selected { background:rgba(255,215,0,0.16);color:#FCD34D;font-weight:600; }
   .admin-row { display:grid;grid-template-columns:1fr 1fr;gap:0.75rem; }
   .admin-btn { padding:0.6rem 1.2rem;border-radius:8px;font-family:'Inter',sans-serif;font-size:0.82rem;font-weight:700;cursor:none;transition:all .2s;border:1px solid; }
   .admin-btn-gold { background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.35);color:#FFD700; }
@@ -1341,6 +1459,7 @@
   .msg-messages-area {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 1rem 1.25rem;
     display: flex;
     flex-direction: column;
@@ -1359,13 +1478,15 @@
   }
   .msg-date-separator::before, .msg-date-separator::after { content:'';flex:1;height:1px;background:var(--border); }
   .msg-bubble-group { display:flex;gap:0.55rem;margin-bottom:0.5rem;align-items:flex-end; }
-  .msg-bubble-group.mine { flex-direction:row-reverse; }
+  .msg-bubble-group.mine { justify-content:flex-end; }
+  .msg-bubble-group.mine .msg-bubble-avatar { display:none; }
   .msg-bubble-avatar { width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0;align-self:flex-end;cursor:none; }
   .msg-bubble-avatar:hover { border-color:var(--purple-light); }
-  .msg-bubble-stack { display:flex;flex-direction:column;gap:0.18rem;max-width:65%; }
+  .msg-bubble-stack { display:flex;flex-direction:column;gap:0.18rem;max-width:46%;align-items:flex-start; }
   .msg-bubble-group.mine .msg-bubble-stack { align-items:flex-end; }
   .msg-bubble-sender { font-size:0.68rem;color:var(--text-muted);margin-bottom:0.1rem;font-weight:500; }
-  .msg-bubble-group.mine .msg-bubble-sender { text-align:right; }
+  .msg-bubble-group.mine .msg-bubble-sender { color:var(--purple-light); }
+  .msg-bubble-seen { font-size:0.68rem;color:var(--text-muted);margin-top:0.15rem;align-self:flex-end; }
   .msg-bubble {
     padding: 0.55rem 0.9rem;
     border-radius: 16px;
@@ -1383,25 +1504,188 @@
     border-color: rgba(124,58,237,0.3);
   }
   .msg-bubble.gif-bubble { padding:0.3rem;background:transparent;border:none;overflow:hidden;border-radius:12px; }
-  .msg-bubble.gif-bubble .msg-gif-img { width:240px;max-width:100%;border-radius:10px;display:block;cursor:none; }
+  .msg-bubble.gif-bubble .msg-gif-img { width:320px;max-width:100%;border-radius:10px;display:block;cursor:none; }
   .msg-gif-wrap { position:relative;display:inline-block; }
   .msg-gif-save-btn {
-    position: absolute; top: 6px; right: 6px;
-    width: 28px; height: 28px;
-    background: rgba(0,0,0,0.55);
+    position: absolute; top: 8px; right: 8px;
+    width: 30px; height: 30px;
+    background: rgba(15,15,22,0.65);
+    backdrop-filter: blur(6px);
     border-radius: 50%;
-    border: none;
+    border: 1px solid rgba(255,255,255,0.12);
     color: #fff;
-    font-size: 0.85rem;
     display: flex; align-items: center; justify-content: center;
     cursor: none;
-    transition: all 0.2s;
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), background 0.2s, border-color 0.2s, opacity 0.2s;
     opacity: 0;
+    transform: scale(0.85);
   }
-  .msg-gif-wrap:hover .msg-gif-save-btn { opacity: 1; }
-  .msg-gif-save-btn.saved { color: #FCD34D; }
+  .msg-gif-save-btn svg { width:16px;height:16px;transition:transform 0.2s, fill 0.2s, stroke 0.2s; }
+  .msg-gif-wrap:hover .msg-gif-save-btn { opacity: 1; transform: scale(1); }
+  .msg-gif-save-btn:hover { background: rgba(15,15,22,0.85); border-color: rgba(252,211,77,0.5); transform: scale(1.12); }
+  .msg-gif-save-btn.saved { opacity: 1; border-color: rgba(252,211,77,0.5); box-shadow: 0 0 10px rgba(252,211,77,0.35); }
+  .msg-gif-save-btn.saved svg { fill: #FCD34D; stroke: #FCD34D; transform: scale(1.05); }
+  .msg-gif-save-btn:not(.saved) svg { fill: none; stroke: #fff; }
+  .msg-gif-save-btn.saved:active svg, .msg-gif-save-btn:active svg { transform: scale(0.8); }
   .msg-bubble-time { font-size:0.6rem;color:var(--text-muted);margin-top:0.15rem; }
-  .msg-bubble-group.mine .msg-bubble-time { text-align:right; }
+  .msg-bubble-edited { font-size:0.6rem;color:var(--text-muted);margin-left:0.35rem;font-style:italic; }
+  .msg-bubble-deleted { font-style:italic;color:var(--text-muted);opacity:0.75; }
+
+  /* MESSAGE ROW (bubble + hover toolbar) */
+  .msg-row { position:relative;display:flex;align-items:center;gap:0.3rem; }
+  .msg-toolbar {
+    display:flex;align-items:center;gap:0.15rem;
+    opacity:0;transform:translateY(2px);
+    transition:opacity 0.15s,transform 0.15s;
+    pointer-events:none;
+  }
+  .msg-row:hover .msg-toolbar { opacity:1;transform:translateY(0);pointer-events:auto; }
+  .msg-toolbar-btn {
+    width:24px;height:24px;border-radius:6px;border:1px solid var(--border);
+    background:rgba(0,0,0,0.4);color:var(--text-muted);
+    display:flex;align-items:center;justify-content:center;
+    cursor:none;font-size:0.72rem;transition:all 0.15s;
+  }
+  .msg-toolbar-btn:hover { border-color:rgba(124,58,237,0.4);color:var(--purple-light);background:rgba(124,58,237,0.1); }
+
+  /* REACTIONS */
+  .msg-reactions { display:flex;flex-wrap:wrap;gap:0.25rem;margin-top:0.25rem; }
+  .msg-reaction-pill {
+    display:flex;align-items:center;gap:0.25rem;
+    padding:0.1rem 0.45rem;border-radius:999px;
+    background:rgba(255,255,255,0.05);border:1px solid var(--border);
+    font-size:0.7rem;color:var(--text-muted);cursor:none;transition:all 0.15s;
+  }
+  .msg-reaction-pill:hover { border-color:rgba(124,58,237,0.4); }
+  .msg-reaction-pill.mine-reaction { background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.4);color:var(--purple-light); }
+
+  /* REACTION QUICK PICKER */
+  .msg-react-picker {
+    position:absolute;bottom:100%;margin-bottom:0.3rem;
+    display:flex;gap:0.2rem;padding:0.3rem;border-radius:10px;
+    background:rgba(15,15,20,0.97);border:1px solid var(--border);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    z-index:30;opacity:0;visibility:hidden;transform:translateY(4px);
+    transition:opacity 0.15s,transform 0.15s,visibility 0.15s;
+  }
+  .msg-react-picker.open { opacity:1;visibility:visible;transform:translateY(0); }
+  .msg-react-picker button { background:none;border:none;font-size:1.05rem;cursor:none;padding:0.1rem 0.2rem;border-radius:6px;transition:background 0.15s; }
+  .msg-react-picker button:hover { background:rgba(255,255,255,0.08); }
+
+  /* EDIT MODE */
+  .msg-edit-box { display:flex;flex-direction:column;gap:0.35rem;min-width:200px; }
+  .msg-edit-textarea {
+    background:rgba(255,255,255,0.06);border:1px solid rgba(124,58,237,0.4);
+    border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.85rem;
+    padding:0.5rem 0.7rem;resize:none;outline:none;min-height:38px;
+  }
+  .msg-edit-actions { display:flex;gap:0.4rem;justify-content:flex-end; }
+  .msg-edit-actions button { font-size:0.68rem;padding:0.2rem 0.6rem;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:none; }
+  .msg-edit-actions button.save { color:var(--purple-light);border-color:rgba(124,58,237,0.4); }
+
+  /* FILE / IMAGE / VOICE / LINK BUBBLES */
+  .msg-bubble.image-bubble, .msg-bubble.video-bubble { padding:0.3rem;background:transparent;border:none;overflow:hidden;border-radius:12px;position:relative; }
+  .msg-bubble.image-bubble img, .msg-bubble.video-bubble video { width:320px;max-width:100%;border-radius:10px;display:block;cursor:none; }
+  .msg-bubble.video-bubble { display:flex; }
+  .msg-bubble.video-bubble::after {
+    content:'▶'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:42px;height:42px;border-radius:50%;background:rgba(0,0,0,0.55);
+    color:#fff;display:flex;align-items:center;justify-content:center;font-size:1rem;
+    pointer-events:none;
+  }
+  .msg-file-card {
+    display:flex;align-items:center;gap:0.65rem;
+    padding:0.6rem 0.8rem;border-radius:12px;min-width:200px;max-width:280px;
+    background:rgba(255,255,255,0.05);border:1px solid var(--border);
+    text-decoration:none;color:var(--text);
+  }
+  .msg-bubble.mine .msg-file-card { background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.3); }
+  .msg-file-icon { width:34px;height:34px;border-radius:8px;background:rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0; }
+  .msg-file-info { flex:1;min-width:0; }
+  .msg-file-name { font-size:0.78rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .msg-file-size { font-size:0.65rem;color:var(--text-muted);margin-top:0.1rem; }
+  .msg-voice-card { display:flex;align-items:center;gap:0.6rem;padding:0.55rem 0.8rem;border-radius:14px;min-width:210px;background:rgba(255,255,255,0.05);border:1px solid var(--border); }
+  .msg-bubble.mine .msg-voice-card { background:rgba(124,58,237,0.15);border-color:rgba(124,58,237,0.3); }
+  .msg-voice-play { width:34px;height:34px;border-radius:50%;border:none;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;cursor:none;flex-shrink:0;transition:background 0.15s; }
+  .msg-voice-play:hover { background:var(--purple-light); }
+  .msg-voice-play svg { width:14px;height:14px; }
+  .msg-voice-wave { flex:1;display:flex;align-items:center;gap:2px;height:24px;cursor:none; }
+  .msg-voice-wave-bar { width:3px;border-radius:2px;background:var(--text-dim);flex-shrink:0;transition:background 0.15s; }
+  .msg-voice-wave-bar.played { background:var(--purple-light); }
+  .msg-voice-time { font-size:0.65rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:34px;text-align:right;flex-shrink:0; }
+  .msg-link-card { display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.8rem;border-radius:12px;background:rgba(56,189,248,0.08);border:1px solid rgba(56,189,248,0.25);color:#7DD3FC;text-decoration:none;font-size:0.8rem;word-break:break-all;max-width:260px; }
+  .msg-link-card svg { width:15px;height:15px;flex-shrink:0; }
+  .msg-bubble a.msg-inline-link { color:#7DD3FC;text-decoration:underline; }
+
+  /* IMPORT MENU (crochet button) */
+  .msg-import-wrap { position:relative; }
+  .msg-import-menu {
+    position:absolute;bottom:100%;left:0;margin-bottom:0.4rem;
+    width:170px;border-radius:10px;overflow:hidden;
+    background:rgba(15,15,20,0.97);border:1px solid var(--border);
+    box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    opacity:0;visibility:hidden;transform:translateY(4px);
+    transition:opacity 0.15s,transform 0.15s,visibility 0.15s;z-index:30;
+  }
+  .msg-import-menu.open { opacity:1;visibility:visible;transform:translateY(0); }
+  .msg-import-item { display:flex;align-items:center;gap:0.55rem;padding:0.55rem 0.75rem;font-size:0.78rem;color:var(--text-muted);cursor:none;transition:all 0.15s; }
+  .msg-import-item:hover { background:rgba(124,58,237,0.1);color:var(--purple-light); }
+
+  /* VOICE RECORDER */
+  .msg-recording-bar { display:none;align-items:center;gap:0.6rem;padding:0.45rem 0.85rem;border-radius:12px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.35);margin-bottom:0.5rem; }
+  .msg-recording-bar.active { display:flex; }
+  .msg-rec-dot { width:9px;height:9px;border-radius:50%;background:#F87171;animation:msgRecPulse 1s infinite; }
+  @keyframes msgRecPulse { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+  .msg-rec-time { font-size:0.78rem;color:var(--text);font-family:'JetBrains Mono',monospace;flex:1; }
+  .msg-rec-cancel, .msg-rec-send { font-size:0.7rem;padding:0.25rem 0.6rem;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:none; }
+  .msg-rec-send { color:#34D399;border-color:rgba(52,211,153,0.4); }
+
+  /* DRAG & DROP OVERLAY */
+  .msg-drop-overlay {
+    position:absolute;inset:0;z-index:40;
+    display:none;align-items:center;justify-content:center;flex-direction:column;gap:0.5rem;
+    background:rgba(124,58,237,0.1);backdrop-filter:blur(3px);
+    border:2px dashed rgba(124,58,237,0.5);border-radius:8px;
+    color:var(--purple-light);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;
+  }
+  .msg-drop-overlay.active { display:flex; }
+  .msg-drop-overlay svg { width:36px;height:36px;opacity:0.7; }
+
+  /* CUSTOM MEDIA LIGHTBOX (images & videos) */
+  .msg-lightbox {
+    position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,0,0.92);
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .msg-lightbox.open { display: flex; opacity: 1; }
+  .msg-lightbox-stage { max-width: 90vw; max-height: 78vh; display:flex;align-items:center;justify-content:center; }
+  .msg-lightbox-stage img, .msg-lightbox-stage video { max-width: 90vw; max-height: 78vh; border-radius: 10px; object-fit: contain; }
+  .msg-lightbox-close {
+    position: absolute; top: 1.25rem; right: 1.5rem;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); border: 1px solid var(--border);
+    color: var(--text); display: flex; align-items: center; justify-content: center;
+    cursor: none; font-size: 1.1rem; transition: all 0.2s;
+  }
+  .msg-lightbox-close:hover { background: rgba(248,113,113,0.2); border-color:#F87171; color:#F87171; }
+  .msg-lightbox-controls {
+    display: flex; align-items: center; gap: 0.85rem;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.6rem 1rem;
+  }
+  .msg-lightbox-controls button {
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+    background: transparent; color: var(--text); display: flex; align-items: center; justify-content: center;
+    cursor: none; transition: all 0.2s;
+  }
+  .msg-lightbox-controls button:hover { border-color: rgba(124,58,237,0.4); color: var(--purple-light); background: rgba(124,58,237,0.1); }
+  .msg-lightbox-controls button svg { width: 16px; height: 16px; }
+  .msg-lightbox-volume { width: 90px; accent-color: var(--purple); cursor: none; }
+  .msg-lightbox-progress { display:flex;align-items:center;gap:0.5rem;flex:1; }
+  .msg-lightbox-progress input[type=range] { flex:1;accent-color:var(--purple);cursor:none; }
+  .msg-lightbox-time { font-size:0.68rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:70px;text-align:center; }
 
   /* INPUT ZONE */
   .msg-input-zone {
@@ -1503,8 +1787,10 @@
   .gif-search-bar input { width:100%;padding:0.4rem 0.75rem 0.4rem 2rem;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:'Inter',sans-serif;font-size:0.8rem;outline:none; }
   .gif-search-bar input:focus { border-color:rgba(124,58,237,0.4); }
   .gif-search-bar svg { position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--text-muted);width:13px;height:13px;pointer-events:none; }
-  .gif-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;padding:0.5rem;overflow-y:auto;flex:1;scrollbar-width:thin; }
+  .gif-grid { display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;padding:0.6rem;overflow-y:auto;flex:1;scrollbar-width:thin; }
   .gif-item { border-radius:8px;overflow:hidden;cursor:none;position:relative;aspect-ratio:4/3; }
+  .gif-item.gif-item-saved .msg-gif-save-btn { top:4px;right:4px;width:24px;height:24px; }
+  .gif-item.gif-item-saved .msg-gif-save-btn svg { width:13px;height:13px; }
   .gif-item img { width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s; }
   .gif-item:hover img { transform:scale(1.04); }
   .gif-loading { text-align:center;padding:1.5rem;color:var(--text-muted);font-size:0.8rem;grid-column:1/-1; }
@@ -1627,12 +1913,17 @@
 
 <canvas id="starfield"></canvas>
 <svg id="nexus-grid" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-  <defs><pattern id="nexus-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="0.4" fill="rgba(255,255,255,0.12)"/></pattern></defs>
+  <defs><pattern id="nexus-dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,0.045)"/></pattern></defs>
   <rect width="100%" height="100%" fill="url(#nexus-dots)"/>
+</svg>
+<svg id="nexus-grid-glow" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <defs><pattern id="nexus-dots-glow" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="14" cy="14" r="1.3" fill="rgba(255,255,255,0.55)"/></pattern></defs>
+  <rect width="100%" height="100%" fill="url(#nexus-dots-glow)"/>
 </svg>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<div class="wallpaper-layer" id="wallpaperLayer"></div>
 <div class="cursor-light" id="cursorLight"></div>
 
 <!-- LOADING -->
@@ -1699,6 +1990,7 @@
   <div class="profile-modal">
     <button class="profile-close" id="profileClose">✕</button>
     <img class="profile-avatar" id="profileAvatar" src="" alt="avatar">
+    <div class="profile-avatar-history" id="profileAvatarHistory"></div>
     <div class="profile-name" id="profileName"></div>
     <div class="profile-username" id="profileUsername"></div>
     <div class="profile-bio" id="profileBio"></div>
@@ -1710,6 +2002,7 @@
       <div class="profile-meta-item"><div class="profile-meta-label">Rôle</div><div class="profile-meta-value" id="profileRoleName">Membre</div></div>
       <div class="profile-meta-item"><div class="profile-meta-label">Permissions</div><div class="profile-meta-value" id="profilePerms">0/6</div></div>
     </div>
+    <button class="profile-block-btn" id="profileBlockBtn" style="display:none;" onclick="toggleBlockUser()">🚫 <span id="profileBlockBtnLabel">Bloquer</span></button>
   </div>
 </div>
 
@@ -1778,10 +2071,11 @@
       </div>
       <div class="admin-section" id="atab-scripts">
         <div class="admin-form-section">
-          <div class="admin-form-section-title">➕ Ajouter un nouveau script</div>
+          <div class="admin-form-section-title" id="scriptFormTitle">➕ Ajouter un nouveau script</div>
           <div class="admin-row">
             <div class="admin-field"><label class="admin-label">Nom du script *</label><input class="admin-input" id="newScriptName" placeholder="Ex: Speed Hub v3"></div>
             <div class="admin-field"><label class="admin-label">Catégorie *</label><select class="admin-select" id="newScriptCategory"><option value="game">🎮 Game</option><option value="util">⚡ Utilitaire</option></select></div>
+            <div class="admin-field" id="newScriptUncField"><label class="admin-label" style="display:flex;align-items:center;gap:0.5rem;font-weight:400;cursor:none;"><input type="checkbox" id="newScriptUsesUnc"> Utilise des fonctions UNC/sUNC (script Interne)</label></div>
           </div>
           <div class="admin-row">
             <div class="admin-field"><label class="admin-label">Nom du jeu</label><input class="admin-input" id="newScriptGameName" placeholder="Ex: Speed Run"></div>
@@ -1797,7 +2091,10 @@
           <div class="admin-field"><label class="admin-label">Script complet *</label><textarea class="admin-textarea" id="newScriptCode" placeholder='loadstring(game:HttpGet("https://..."))()' rows="3"></textarea></div>
           <div class="admin-field"><label class="admin-label">Script affiché sur la carte</label><textarea class="admin-textarea" id="newScriptDisplay" placeholder="-- Version affichée sur la carte" rows="3"></textarea></div>
           <div class="admin-field"><label class="admin-label">Statut</label><select class="admin-select" id="newScriptStatus"><option value="active">✅ Actif</option><option value="new">🆕 Nouveau</option><option value="popular">🔥 Populaire</option></select></div>
-          <button class="admin-btn admin-btn-gold admin-btn-full" id="addScriptBtn">➕ Ajouter le script</button>
+          <div style="display:flex;gap:0.6rem;">
+            <button class="admin-btn admin-btn-gold admin-btn-full" id="addScriptBtn" style="flex:1;">➕ Ajouter le script</button>
+            <button class="admin-btn admin-btn-full" id="cancelEditScriptBtn" style="display:none;flex:0 0 auto;border-color:var(--border);color:var(--text-muted);">Annuler</button>
+          </div>
         </div>
         <div>
           <div class="admin-form-section-title" style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:0.75rem;">Scripts existants</div>
@@ -1805,7 +2102,15 @@
         </div>
       </div>
       <div class="admin-section" id="atab-comments">
-        <div class="admin-field"><label class="admin-label">Filtrer par script</label><select class="admin-select" id="adminCommentFilter"></select></div>
+        <div class="admin-field"><label class="admin-label">Filtrer par script</label>
+          <div class="custom-select" id="adminCommentFilterWrap">
+            <button type="button" class="custom-select-trigger" id="adminCommentFilterTrigger">
+              <span id="adminCommentFilterLabel">Sélectionner un script...</span>
+              <svg class="custom-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="custom-select-menu" id="adminCommentFilterMenu"></div>
+          </div>
+        </div>
         <div id="adminCommentsList"></div>
       </div>
     </div>
@@ -1933,12 +2238,73 @@
                 </div>
               </div>
             </div>
+            <div class="theme-group">
+              <div class="theme-group-label" id="themeGroupCursor">✦ Curseur</div>
+              <div class="theme-grid-other">
+                <div class="cursor-option selected" data-cursor="classic">
+                  <div class="cursor-preview cursor-preview-classic"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label" id="cursorNameClassic">Classique</div>
+                </div>
+                <div class="cursor-option" data-cursor="aurora">
+                  <div class="cursor-preview cursor-preview-aurora"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label" id="cursorNameNeon">Aurore</div>
+                </div>
+                <div class="cursor-option" data-cursor="comet">
+                  <div class="cursor-preview cursor-preview-comet"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label" id="cursorNameComet">Comète</div>
+                </div>
+                <div class="cursor-option" data-cursor="prism">
+                  <div class="cursor-preview cursor-preview-prism"><div class="cursor-preview-dot"></div><div class="cursor-preview-ring"></div></div>
+                  <div class="theme-label" id="cursorNamePrism">Prisme</div>
+                </div>
+                <div class="cursor-option" data-cursor="minimal">
+                  <div class="cursor-preview cursor-preview-minimal"><div class="cursor-preview-dot"></div></div>
+                  <div class="theme-label" id="cursorNameMinimal">Minimal</div>
+                </div>
+              </div>
+            </div>
+            <div class="theme-group">
+              <div class="theme-group-label" id="themeGroupWallpaper">✦ Fond d'écran personnalisé</div>
+              <div class="wallpaper-settings">
+                <div class="wallpaper-row">
+                  <input type="text" id="wallpaperUrlInput" class="auth-input" placeholder="Lien de l'image (https://...)" style="flex:1;">
+                  <label class="wallpaper-upload-btn" for="wallpaperFileInput">📁<input type="file" id="wallpaperFileInput" accept="image/*" hidden></label>
+                  <button class="wallpaper-clear-btn" id="wallpaperClearBtn" title="Retirer le fond d'écran">✕</button>
+                </div>
+                <div class="wallpaper-row wallpaper-slider-row">
+                  <span id="wallpaperBlurLabel">Flou</span>
+                  <input type="range" id="wallpaperBlurRange" min="0" max="30" value="0">
+                  <span id="wallpaperBlurValue">0px</span>
+                </div>
+                <div class="wallpaper-row wallpaper-toggle-row">
+                  <span id="wallpaperRevealLabel">Révéler l'image avec la lumière du curseur</span>
+                  <label class="notif-switch"><input type="checkbox" id="wallpaperRevealToggle"><span class="notif-switch-track"></span></label>
+                </div>
+              </div>
+            </div>
           </div>
           <button class="pref-btn" id="notifPrefBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-            <span id="notifBtnLabel">Notifications</span> <span class="coming-soon-badge" id="comingSoonLabel">Bientôt</span>
+            <span id="notifBtnLabel">Notifications</span> <span class="pref-arrow">›</span>
           </button>
-          <div class="notif-coming" id="notifComing">🚧 Cette fonctionnalité arrive bientôt. Reste connecté !</div>
+          <div class="notif-pref-list" id="notifComing">
+            <div class="notif-pref-row">
+              <div><div class="notif-pref-label">💬 Messages privés</div><div class="notif-pref-desc">Recevoir une notification pour chaque nouveau message</div></div>
+              <label class="notif-switch"><input type="checkbox" id="notifPrefMsg"><span class="notif-switch-track"></span></label>
+            </div>
+            <div class="notif-pref-row">
+              <div><div class="notif-pref-label">🤝 Demandes d'amis</div><div class="notif-pref-desc">Être notifié des nouvelles demandes d'amis</div></div>
+              <label class="notif-switch"><input type="checkbox" id="notifPrefFriend"><span class="notif-switch-track"></span></label>
+            </div>
+            <div class="notif-pref-row">
+              <div><div class="notif-pref-label">❤️ Likes &amp; votes</div><div class="notif-pref-desc">Être notifié des likes sur tes scripts/commentaires</div></div>
+              <label class="notif-switch"><input type="checkbox" id="notifPrefVote"><span class="notif-switch-track"></span></label>
+            </div>
+            <div class="notif-pref-row">
+              <div><div class="notif-pref-label">🔊 Son de notification</div><div class="notif-pref-desc">Jouer un son à la réception d'une notification</div></div>
+              <label class="notif-switch"><input type="checkbox" id="notifPrefSound"><span class="notif-switch-track"></span></label>
+            </div>
+          </div>
         </div>
       </div>
       <div class="dash-section">
@@ -2135,7 +2501,7 @@
           <svg width="20" height="20" viewBox="0 0 71 55" fill="currentColor"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.4149C45.5603 0.3986 45.468 0.4396 45.4204 0.5228C44.7963 1.6483 44.105 3.107 43.6209 4.246C38.1637 3.4286 32.7345 3.4286 27.3892 4.246C26.9051 3.1003 26.1886 1.6483 25.5617 0.5228C25.5141 0.4423 25.4218 0.4013 25.3294 0.4149C20.2584 1.2889 15.4057 2.8187 10.8776 4.8978C10.8384 4.9142 10.8048 4.942 10.7825 4.9778C1.5754 18.7349-0.9433 32.1523 0.2929 45.4023C0.2985 45.4696 0.3349 45.534 0.3853 45.5751C6.4845 50.0418 12.3925 52.7189 18.1968 54.5027C18.2892 54.5301 18.3872 54.4964 18.4459 54.4228C19.7963 52.5699 20.9975 50.6143 22.0264 48.5577C22.088 48.4349 22.0292 48.2908 21.9005 48.2443C19.9677 47.5021 18.1296 46.6011 16.3616 45.5751C16.2191 45.4941 16.2079 45.2937 16.3392 45.1978C16.7107 44.9232 17.0822 44.6364 17.4369 44.3469C17.5013 44.2934 17.5924 44.2823 17.6681 44.3169C29.2551 49.6129 41.8394 49.6129 53.2932 44.3169C53.3689 44.2795 53.46 44.2906 53.5272 44.3441C53.8819 44.6336 54.2534 44.9232 54.6277 45.1978C54.759 45.2937 54.7506 45.4941 54.6081 45.5751C52.8401 46.6203 51.002 47.5021 49.0664 48.2415C48.9377 48.288 48.8817 48.4349 48.9433 48.5577C49.9946 50.6115 51.1958 52.5671 52.5238 54.42C52.5797 54.4964 52.6805 54.5301 52.7729 54.5027C58.6018 52.7189 64.5098 50.0418 70.609 45.5751C70.6622 45.534 70.6958 45.4724 70.7014 45.4051C72.172 30.0964 68.2322 16.7979 60.1881 4.9806C60.1686 4.942 60.135 4.9142 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1987C17.3451 26.2838 20.1717 23.0721 23.7259 23.0721C27.3081 23.0721 30.1626 26.3115 30.1066 30.1987C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1987C40.9371 26.2838 43.7636 23.0721 47.3178 23.0721C50.9 23.0721 53.7545 26.3115 53.6985 30.1987C53.6985 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
           <span id="helpJoinLabel">Rejoindre le Discord</span>
         </a>
-        <p class="help-note" id="helpNote">Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #support.</p>
+        <p class="help-note" id="helpNote">Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #🎟️〃ticket.</p>
       </div>
     </div>
   </div>
@@ -2217,21 +2583,56 @@
             <button class="msg-chat-header-btn" id="msgChatMembersBtn" title="Membres du groupe" style="display:none;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </button>
+            <button class="msg-chat-header-btn" id="msgChatBlockBtn" title="Bloquer" style="display:none;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            </button>
             <button class="msg-chat-header-btn" id="msgChatLeaveBtn" title="Quitter / Fermer">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </button>
           </div>
         </div>
         <!-- MESSAGES -->
-        <div class="msg-messages-area" id="msgMessagesArea"></div>
+        <div class="msg-messages-area" id="msgMessagesArea" style="position:relative;">
+          <div class="msg-drop-overlay" id="msgDropOverlay">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Dépose ton fichier ici pour l'envoyer
+          </div>
+          <div id="msgMessagesList" style="display:flex;flex-direction:column;gap:0.35rem;"></div>
+        </div>
         <!-- INPUT -->
         <div class="msg-input-zone" id="msgInputZone">
           <div class="msg-input-above">
             <img class="msg-input-above-avatar" id="msgInputAvatar" src="" alt="">
             <span class="msg-input-above-pseudo" id="msgInputPseudo"></span>
           </div>
+          <div class="msg-recording-bar" id="msgRecordingBar">
+            <div class="msg-rec-dot"></div>
+            <span class="msg-rec-time" id="msgRecTime">0:00</span>
+            <span style="font-size:0.7rem;color:var(--text-muted);">🎙️ Enregistrement vocal...</span>
+            <button class="msg-rec-cancel" id="msgRecCancelBtn">Annuler</button>
+            <button class="msg-rec-send" id="msgRecSendBtn">Envoyer</button>
+          </div>
           <div class="msg-input-row" style="position:relative;">
-            <textarea class="msg-textbox" id="msgTextbox" placeholder="Envoyer un message..." rows="1"></textarea>
+            <div class="msg-import-wrap">
+              <button class="msg-action-btn" id="msgImportBtn" title="Importer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              </button>
+              <div class="msg-import-menu" id="msgImportMenu">
+                <div class="msg-import-item" data-kind="image">🖼️ Image</div>
+                <div class="msg-import-item" data-kind="video">🎬 Vidéo</div>
+                <div class="msg-import-item" data-kind="file">📄 Fichier</div>
+                <div class="msg-import-item" data-kind="folder">📁 Dossier</div>
+                <div class="msg-import-item" data-kind="other">🔗 Autre (lien)</div>
+              </div>
+              <input type="file" id="msgFileInputImage" accept="image/*" style="display:none;">
+              <input type="file" id="msgFileInputVideo" accept="video/*" style="display:none;">
+              <input type="file" id="msgFileInputFile" style="display:none;">
+              <input type="file" id="msgFileInputFolder" webkitdirectory directory multiple style="display:none;">
+            </div>
+            <button class="msg-action-btn" id="msgVoiceBtn" title="Message vocal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+            </button>
+            <textarea class="msg-textbox" id="msgTextbox" placeholder="Envoyer un message..." rows="1" maxlength="10000"></textarea>
             <div style="display:flex;flex-direction:column;gap:0.3rem;position:relative;">
               <div style="position:relative;">
                 <button class="msg-action-btn" id="msgEmojiBtn" title="Emoji">😊</button>
@@ -2261,6 +2662,13 @@
       <div id="groupMembersList"></div>
     </div>
   </div>
+</div>
+
+<!-- CUSTOM MEDIA LIGHTBOX -->
+<div class="msg-lightbox" id="msgLightbox">
+  <button class="msg-lightbox-close" id="msgLightboxClose">✕</button>
+  <div class="msg-lightbox-stage" id="msgLightboxStage"></div>
+  <div class="msg-lightbox-controls" id="msgLightboxControls" style="display:none;"></div>
 </div>
 
 <!-- NEW CONVERSATION MODAL -->
@@ -2350,6 +2758,11 @@ const ROLE_BADGE_CLASS = {
 function getPermLevel(u){
   if(!u) return 0;
   return ROLE_PERMS[u.role] || 0;
+}
+// A user counts as "certified" either via the explicit certified role, or automatically if staff+
+function isCertifiedUser(u){
+  if(!u) return false;
+  return u.role === 'certified' || getPermLevel(u) >= 3;
 }
 
 function hasPerm(u, level){
@@ -2524,6 +2937,12 @@ const L = {
     basicLightName:'Clarté',
     themeNameMidnight:'Minuit',
     themeNameNexus:'Nexus',
+    themeGroupCursor:'✦ Curseur',
+    cursorNameClassic:'Classique',
+    cursorNameNeon:'Aurore',
+    cursorNameComet:'Comète',
+    cursorNamePrism:'Prisme',
+    cursorNameMinimal:'Minimal',
     editProfileLabel:'Modifier le compte',
     editProfileTitle:'Modifier le profil',
     editAvatarLabel:'Avatar',
@@ -2625,7 +3044,14 @@ const L = {
     helpStep3:'Obtiens de l\'aide',
     helpStep3Desc:'Un membre de l\'équipe du staff te répondra et t\'aideras a résoudre ton probleme.',
     helpJoin:'Rejoindre le Discord',
-    helpNote:'Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #support.'
+    helpNote:'Déjà sur Discord ? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Clique ici</a> pour aller directement au salon #🎟️〃ticket.',
+    execExternalLabel:'🌐 Externes',
+    gifMySaved:'⭐ Mes GIFs sauvegardés',
+    gifTrending:'🔥 Tendances',
+    gifLoading:'Chargement...',
+    gifSearching:'Recherche...',
+    gifNoneFound:'Aucun GIF trouvé',
+    gifSearchError:'Erreur de recherche.'
   },
   en:{
     navLogin:'Login',
@@ -2692,6 +3118,12 @@ const L = {
     basicLightName:'Light',
     themeNameMidnight:'Midnight',
     themeNameNexus:'Nexus',
+    themeGroupCursor:'✦ Cursor',
+    cursorNameClassic:'Classic',
+    cursorNameNeon:'Aurora',
+    cursorNameComet:'Comet',
+    cursorNamePrism:'Prism',
+    cursorNameMinimal:'Minimal',
     editProfileLabel:'Edit account',
     editProfileTitle:'Edit profile',
     editAvatarLabel:'Avatar',
@@ -2793,7 +3225,14 @@ const L = {
     helpStep3:'Get help',
     helpStep3Desc:'A staff team member will reply and help you solve your problem.',
     helpJoin:'Join Discord',
-    helpNote:'Already on Discord? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Click here</a> to go directly to #support.'
+    helpNote:'Already on Discord? <a href="https://discord.com/channels/1515337358546042980/1517933435858190366" target="_blank" rel="noopener">Click here</a> to go directly to #🎟️〃ticket.',
+    execExternalLabel:'🌐 External',
+    gifMySaved:'⭐ My saved GIFs',
+    gifTrending:'🔥 Trending',
+    gifLoading:'Loading...',
+    gifSearching:'Searching...',
+    gifNoneFound:'No GIFs found',
+    gifSearchError:'Search error.'
   }
 };
 function t(k){ return (L[currentLang]?.[k]) ?? (L['fr'][k] ?? k); }
@@ -2865,6 +3304,7 @@ function applyTranslations(){
   setTxt('themeGroupBasic',t('themeGroupBasic')); setTxt('themeGroupOther',t('themeGroupOther'));
   setTxt('basicDarkName',t('basicDarkName')); setTxt('basicLightName',t('basicLightName'));
   setTxt('themeNameMidnight',t('themeNameMidnight')); setTxt('themeNameNexus',t('themeNameNexus'));
+  setTxt('themeGroupCursor',t('themeGroupCursor')); setTxt('cursorNameClassic',t('cursorNameClassic')); setTxt('cursorNameNeon',t('cursorNameNeon')); setTxt('cursorNameComet',t('cursorNameComet')); setTxt('cursorNamePrism',t('cursorNamePrism')); setTxt('cursorNameMinimal',t('cursorNameMinimal'));
   setTxt('editProfileLabel',t('editProfileLabel')); setTxt('editProfileTitle',t('editProfileTitle'));
   setTxt('editAvatarLabel',t('editAvatarLabel')); setTxt('editDisplayNameLabel',t('editDisplayNameLabel'));
   setTxt('editUsernameLabel',t('editUsernameLabel')); setTxt('editBioLabel',t('editBioLabel'));
@@ -3001,10 +3441,10 @@ async function sbLoadScripts(){
 }
 async function sbInsertDefaultScripts(){
   const defaults = [
-    {id:'examination-v4',name:'Examination v4',category:'game',status:'new',status_label:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',game_name:'Examination',game_link:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',active_players:'~600',maturity:'Modérée',script_file:'Examination-Main[obf].lua',description:'Automatise et gère vos examinations avec précision. Détection intelligente des formulaires.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Examination v4\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20[obf]"))()'},
+    {id:'examination-v4',name:'Examination v8',category:'game',status:'new',status_label:'Nouveau',banner:'https://tr.rbxcdn.com/180DAY-17c81fe0bba2dc36d0245a36701fd5ed/768/432/Image/Webp/noFilter',game_name:'Examination',game_link:'https://www.roblox.com/fr/games/10165583746/Examination',creator:'MENLO-INFANTRY-DIVISION',active_players:'~600',maturity:'Modérée',script_file:'Examination-Main[obf].lua',description:'Automatise et gère vos examinations avec précision. Détection intelligente des formulaires.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Examination v8\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Examination/refs/heads/main/Examination-Main%20[obf]"))()'},
     {id:'ink-game-v7',name:'Ink Game v7',category:'game',status:'active',status_label:'Actif',banner:'https://tr.rbxcdn.com/180DAY-eeb754830041c5f9ddfd168242949f14/768/432/Image/Webp/noFilter',game_name:'Ink Game',game_link:'https://www.roblox.com/fr/games/99567941238278/Ink-Game',creator:'game i think',active_players:'~10 000',maturity:'Moyenne',script_file:'InkGame-Main[obf].lua',description:'Script Ink Game avec ESP, auto-collect et optimisations avancées.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20%5Bobf%5D"))()',script_display:'-- Sentinel Script · Ink Game v7\nloadstring(game:HttpGet("https://raw.githubusercontent.com/selym0905-ops/Ink-Game/refs/heads/main/InkGame-Main%20[obf]"))()'},
-    {id:'infinite-yield',name:'Infinite Yield',category:'util',status:'popular',status_label:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',game_name:'Roblox (universel)',game_link:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',active_players:null,maturity:null,script_file:'infiniteyield.lua',description:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',script_display:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'},
-    {id:'dex-explorer',name:'Dex Explorer',category:'util',status:'popular',status_label:'Populaire',banner:'https://i.postimg.cc/t1S7Y1qF/placeholder.png',game_name:'Roblox (universel)',game_link:null,creator:'AZYsGithub',active_players:null,maturity:'Modérée',script_file:'dex-explorer.lua',description:'Accède à l\'intégralité du jeu (excepté les ServerSided Scripts). Explore chaque recoin de l\'univers Roblox.',script:'loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()',script_display:'-- Dex Explorer\nloadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()'}
+    {id:'infinite-yield',name:'Infinite Yield',category:'util',uses_unc:false,status:'popular',status_label:'Populaire',banner:'https://infyiff.github.io/resources/Logo_Small.png',game_name:'Roblox (universel)',game_link:null,creator:'Edge / Zwolf / Moon / Hunter / Toon / Peyton / ATP',active_players:null,maturity:null,script_file:'infiniteyield.lua',description:'Le célèbre script admin avec des centaines de commandes pour Roblox.',script:'loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()',script_display:'-- Infinite Yield Admin\nloadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()'},
+    {id:'dex-explorer',name:'Dex Explorer',category:'util',uses_unc:true,status:'popular',status_label:'Populaire',banner:'https://i.postimg.cc/t1S7Y1qF/placeholder.png',game_name:'Roblox (universel)',game_link:null,creator:'AZYsGithub',active_players:null,maturity:'Modérée',script_file:'dex-explorer.lua',description:'Accède à l\'intégralité du jeu (excepté les ServerSided Scripts). Explore chaque recoin de l\'univers Roblox.',script:'loadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()',script_display:'-- Dex Explorer\nloadstring(game:HttpGet("https://github.com/AZYsGithub/DexPlusPlus/releases/latest/download/out.lua"))()'}
   ];
   for(const s of defaults){
     const { error } = await sb.from('scripts').upsert(s);
@@ -3014,6 +3454,10 @@ async function sbInsertDefaultScripts(){
 async function sbAddScript(data){
   const { error } = await sb.from('scripts').insert(data);
   if(error) throw new Error('Erreur ajout script: '+error.message);
+}
+async function sbUpdateScript(id, patch){
+  const { error } = await sb.from('scripts').update(patch).eq('id', id);
+  if(error) throw new Error('Erreur modification script: '+error.message);
 }
 async function sbDeleteScript(id){
   const { error } = await sb.from('scripts').delete().eq('id', id);
@@ -3153,9 +3597,10 @@ function readImageFile(file, cb){
 // CURSOR
 // ============================================================
 const cursorDot=document.getElementById('cursor'), cursorRing=document.getElementById('cursorRing'), cursorLight=document.getElementById('cursorLight');
+const nexusGridGlow=document.getElementById('nexus-grid-glow');
 let mx=window.innerWidth/2, my=window.innerHeight/2, rx=mx, ry=my;
 document.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
-(function loop(){ cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; cursorLight.style.left=mx+'px'; cursorLight.style.top=my+'px'; rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; requestAnimationFrame(loop); })();
+(function loop(){ cursorDot.style.left=mx+'px'; cursorDot.style.top=my+'px'; cursorLight.style.left=mx+'px'; cursorLight.style.top=my+'px'; rx+=(mx-rx)*0.14; ry+=(my-ry)*0.14; cursorRing.style.left=rx+'px'; cursorRing.style.top=ry+'px'; if(nexusGridGlow){ nexusGridGlow.style.setProperty('--ngx', mx+'px'); nexusGridGlow.style.setProperty('--ngy', my+'px'); } requestAnimationFrame(loop); })();
 
 // ============================================================
 // CARD HOVER
@@ -3191,7 +3636,8 @@ window.addEventListener('resize',()=>{ if(!starActive) return; starCanvas.width=
 // ============================================================
 let currentTheme = Store.get('theme','dark');
 function applyTheme(theme){
-  document.body.className = 'theme-'+theme;
+  const cursorClasses = Array.from(document.body.classList).filter(c=>c.startsWith('cursor-'));
+  document.body.className = 'theme-'+theme + (cursorClasses.length ? ' '+cursorClasses.join(' ') : '');
   currentTheme=theme; Store.set('theme',theme);
   updateBasicSplitUI();
   document.querySelectorAll('.theme-option').forEach(opt=>opt.classList.toggle('selected', opt.dataset.theme===theme));
@@ -3212,6 +3658,87 @@ document.querySelectorAll('.theme-option').forEach(opt=>opt.addEventListener('cl
 applyTheme(currentTheme);
 
 // ============================================================
+// CURSOR STYLE
+// ============================================================
+let currentCursorStyle = Store.get('cursorStyle','classic');
+if(currentCursorStyle==='neon') currentCursorStyle='aurora'; // migration ancien nom
+function applyCursorStyle(style){
+  document.body.classList.remove('cursor-classic','cursor-aurora','cursor-minimal','cursor-comet','cursor-prism');
+  document.body.classList.add('cursor-'+style);
+  currentCursorStyle = style; Store.set('cursorStyle', style);
+  document.querySelectorAll('.cursor-option').forEach(opt=>opt.classList.toggle('selected', opt.dataset.cursor===style));
+}
+document.querySelectorAll('.cursor-option').forEach(opt=>opt.addEventListener('click',()=>applyCursorStyle(opt.dataset.cursor)));
+applyCursorStyle(currentCursorStyle);
+
+// ============================================================
+// WALLPAPER PERSONNALISÉ
+// ============================================================
+const wallpaperLayer = document.getElementById('wallpaperLayer');
+const wallpaperUrlInput = document.getElementById('wallpaperUrlInput');
+const wallpaperFileInput = document.getElementById('wallpaperFileInput');
+const wallpaperClearBtn = document.getElementById('wallpaperClearBtn');
+const wallpaperBlurRange = document.getElementById('wallpaperBlurRange');
+const wallpaperBlurValue = document.getElementById('wallpaperBlurValue');
+const wallpaperRevealToggle = document.getElementById('wallpaperRevealToggle');
+
+let wallpaperUrl = Store.get('wallpaperUrl', '');
+let wallpaperBlur = Store.get('wallpaperBlur', 0);
+let wallpaperReveal = Store.getBool('wallpaperReveal', false);
+
+function applyWallpaper(url){
+  wallpaperUrl = url || '';
+  Store.set('wallpaperUrl', wallpaperUrl);
+  if(wallpaperUrl){
+    wallpaperLayer.style.backgroundImage = `url("${wallpaperUrl}")`;
+    wallpaperLayer.classList.add('active');
+  } else {
+    wallpaperLayer.style.backgroundImage = '';
+    wallpaperLayer.classList.remove('active');
+  }
+}
+function applyWallpaperBlur(val){
+  wallpaperBlur = val;
+  Store.set('wallpaperBlur', val);
+  document.documentElement.style.setProperty('--wallpaper-blur', val+'px');
+  if(wallpaperBlurValue) wallpaperBlurValue.textContent = val+'px';
+}
+function applyWallpaperReveal(on){
+  wallpaperReveal = on;
+  Store.set('wallpaperReveal', on);
+  wallpaperLayer.classList.toggle('wallpaper-reveal', !!on);
+}
+
+if(wallpaperUrlInput) wallpaperUrlInput.value = wallpaperUrl && !wallpaperUrl.startsWith('data:') ? wallpaperUrl : '';
+if(wallpaperBlurRange) wallpaperBlurRange.value = wallpaperBlur;
+if(wallpaperRevealToggle) wallpaperRevealToggle.checked = wallpaperReveal;
+applyWallpaper(wallpaperUrl);
+applyWallpaperBlur(wallpaperBlur);
+applyWallpaperReveal(wallpaperReveal);
+
+if(wallpaperUrlInput) wallpaperUrlInput.addEventListener('change', ()=>{ applyWallpaper(wallpaperUrlInput.value.trim()); });
+if(wallpaperFileInput) wallpaperFileInput.addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 4*1024*1024){ showToast('⚠️ Image trop lourde (max 4 Mo).', '#F87171'); wallpaperFileInput.value=''; return; }
+  const reader = new FileReader();
+  reader.onload = ()=>{ wallpaperUrlInput.value=''; applyWallpaper(reader.result); };
+  reader.readAsDataURL(file);
+});
+if(wallpaperClearBtn) wallpaperClearBtn.addEventListener('click', ()=>{
+  wallpaperUrlInput.value=''; wallpaperFileInput.value=''; applyWallpaper('');
+});
+if(wallpaperBlurRange) wallpaperBlurRange.addEventListener('input', ()=>{ applyWallpaperBlur(Number(wallpaperBlurRange.value)); });
+if(wallpaperRevealToggle) wallpaperRevealToggle.addEventListener('change', ()=>{ applyWallpaperReveal(wallpaperRevealToggle.checked); });
+
+document.addEventListener('mousemove', e=>{
+  if(wallpaperReveal && wallpaperLayer){
+    wallpaperLayer.style.setProperty('--wpx', e.clientX+'px');
+    wallpaperLayer.style.setProperty('--wpy', e.clientY+'px');
+  }
+});
+
+// ============================================================
 // RENDER CARDS
 // ============================================================
 function getStatusDot(status){
@@ -3224,7 +3751,13 @@ function renderAllCards(){
   const grid = document.getElementById('cardsGrid');
   const noRes = document.getElementById('noResults');
   grid.innerHTML=''; grid.appendChild(noRes);
-  for(const data of scriptsCache){
+  // Within each category, order from most powerful (best vote score) to least
+  const ordered = [...scriptsCache].sort((a,b)=>{
+    const sa = (voteCounts[a.id]?.like||0) - (voteCounts[a.id]?.dislike||0);
+    const sb = (voteCounts[b.id]?.like||0) - (voteCounts[b.id]?.dislike||0);
+    return sb - sa;
+  });
+  for(const data of ordered){
     const card = buildCard(data);
     grid.insertBefore(card, noRes);
   }
@@ -3239,14 +3772,16 @@ function buildCard(data){
   card.className = 'card card-appear';
   card.dataset.category = data.category||'game';
   card.dataset.scriptId = data.id;
+  const isUtil = data.category==='util';
   const catClass = data.category==='util'?'cat-util':'cat-game';
   const catLabel = data.category==='util'?'Utilitaires':'Games';
+  const originBadge = '';
   const statusLabel = data.status_label || (data.status==='new'?'Nouveau':data.status==='popular'?'Populaire':'Actif');
   const votes = voteCounts[data.id]||{like:0,dislike:0};
   const myVote = userVotes[data.id]||null;
   card.innerHTML=`
     <div class="card-top">
-      <div class="card-info"><span class="card-category ${catClass}">${catLabel}</span><div class="card-name">${escHtml(data.name)}</div></div>
+      <div class="card-info"><span class="card-category ${catClass}">${catLabel}</span>${originBadge}<div class="card-name">${escHtml(data.name)}</div></div>
       <div class="card-status">${getStatusDot(data.status)}${escHtml(statusLabel)}</div>
     </div>
     <p class="card-desc">${escHtml(data.description||'')}</p>
@@ -3322,6 +3857,8 @@ async function handleVote(sid, type){
 let currentFilter='all', currentSearch='';
 function applyFiltersAndSearch(){
   const q = currentSearch.toLowerCase().trim();
+  const grid = document.getElementById('cardsGrid');
+  const startHeight = grid.getBoundingClientRect().height;
   let visible=0;
   document.querySelectorAll('.card[data-script-id]').forEach(card=>{
     const catOk = currentFilter==='all' || card.dataset.category===currentFilter;
@@ -3334,6 +3871,26 @@ function applyFiltersAndSearch(){
     if(show) visible++;
   });
   document.getElementById('noResults').classList.toggle('visible', visible===0);
+  applyOriginSectioning();
+  // Smooth height transition so the scrollbar thumb resizes gradually instead of jumping
+  grid.style.height = startHeight + 'px';
+  grid.style.transition = 'none';
+  // Force reflow then measure target height
+  void grid.offsetHeight;
+  grid.style.height = 'auto';
+  const endHeight = grid.getBoundingClientRect().height;
+  grid.style.height = startHeight + 'px';
+  void grid.offsetHeight;
+  grid.style.transition = 'height 0.35s cubic-bezier(.4,0,.2,1)';
+  requestAnimationFrame(()=>{ grid.style.height = endHeight + 'px'; });
+  clearTimeout(grid._heightResetTimer);
+  grid._heightResetTimer = setTimeout(()=>{ grid.style.height = 'auto'; }, 380);
+}
+
+// Origin sectioning for scripts has been removed per request; external scripts now stay in their natural order.
+function applyOriginSectioning(){
+  const grid = document.getElementById('cardsGrid');
+  grid.querySelectorAll('.cards-section-divider').forEach(el=>el.remove());
 }
 const searchInput=document.getElementById('searchInput'), searchClear=document.getElementById('searchClear');
 searchInput.addEventListener('input',()=>{ currentSearch=searchInput.value; searchClear.classList.toggle('visible', currentSearch.length>0); applyFiltersAndSearch(); });
@@ -3460,7 +4017,7 @@ function updateAuthUI(){
     document.getElementById('navUsername').textContent = u.display_name||u.username;
     document.getElementById('dashAccountAvatar').src = av;
     const dnEl = document.getElementById('dashAccountName');
-    const isCert = getPermLevel(u) >= 3;
+    const isCert = isCertifiedUser(u);
     dnEl.innerHTML = escHtml(u.display_name||u.username) + (isCert?certifiedSVG():'');
     if(getPermLevel(u) >= 5){
       const at=document.createElement('span'); at.className='comment-admin-tag'; at.textContent='Admin'; at.style.marginLeft='0.3rem';
@@ -3499,6 +4056,19 @@ let insightsOpen=false, appearOpen=false, notifOpen=false;
 document.getElementById('insightsBtn').addEventListener('click', ()=>{ insightsOpen=!insightsOpen; document.getElementById('insightsPanel').classList.toggle('open',insightsOpen); if(insightsOpen) updateMetrics(); });
 document.getElementById('appearanceBtn').addEventListener('click', ()=>{ appearOpen=!appearOpen; document.getElementById('appearancePanel').classList.toggle('open',appearOpen); });
 document.getElementById('notifPrefBtn').addEventListener('click', ()=>{ notifOpen=!notifOpen; document.getElementById('notifComing').classList.toggle('open',notifOpen); });
+const NOTIF_PREF_DEFAULTS = { msg:true, friend:true, vote:true, sound:true };
+function getNotifPrefs(){ return { ...NOTIF_PREF_DEFAULTS, ...Store.get('notifPrefs', {}) }; }
+function setNotifPref(key, val){ const p = getNotifPrefs(); p[key] = val; Store.set('notifPrefs', p); }
+(function initNotifPrefToggles(){
+  const prefs = getNotifPrefs();
+  const map = { notifPrefMsg:'msg', notifPrefFriend:'friend', notifPrefVote:'vote', notifPrefSound:'sound' };
+  Object.entries(map).forEach(([id,key])=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.checked = prefs[key];
+    el.addEventListener('change', ()=> setNotifPref(key, el.checked));
+  });
+})();
 
 // EDIT PROFILE
 let editProfileOpen=false, editSelectedAvatar='';
@@ -3530,10 +4100,15 @@ document.getElementById('editSaveBtn').addEventListener('click', async ()=>{
     if(exists){ showToast('⚠️ Nom déjà pris.','#F87171'); return; }
   }
   try{
+    const avatarChanged = newAvatar && newAvatar !== currentUser.avatar;
+    const newHistory = avatarChanged
+      ? [currentUser.avatar, ...(currentUser.avatar_history||[])].filter(Boolean).slice(0,8)
+      : (currentUser.avatar_history||[]);
     const updated = await sbUpdateUser(currentUser.username, {
       display_name: newDisplay,
       bio: newBio,
       avatar: newAvatar,
+      avatar_history: newHistory,
       ...(newUsername.toLowerCase()!==currentUser.username.toLowerCase()?{username:newUsername.toLowerCase()}:{})
     });
     sessionLogin(updated);
@@ -3664,10 +4239,10 @@ function renderComments(sid, comments){
   list.innerHTML=comments.slice().reverse().map(c=>{
     const isMine=me&&c.author_username?.toLowerCase()===me;
     const likeCount=c.likes||0, likedByMe=me&&(c.liked_by||[]).includes(me);
-    const certBadge=getPermLevel({username:c.author_username,role:c.author_role})>=3?certifiedSVG():'';
+    const certBadge=isCertifiedUser({username:c.author_username,role:c.author_role})?certifiedSVG():'';
     const adminBadge=getPermLevel({username:c.author_username,role:c.author_role})>=5?'<span class="comment-admin-tag">Admin</span>':'';
     const canDelete=isMine||userIsAdmin;
-    const isAuthorCert = getPermLevel({username:c.author_username,role:c.author_role})>=3;
+    const isAuthorCert = isCertifiedUser({username:c.author_username,role:c.author_role});
     return `<div class="comment-item" id="ci-${c.id}">
       <img class="comment-item-avatar" src="${escHtml(c.avatar||'')}" alt="${escHtml(c.pseudo)}" onerror="this.src='https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(c.pseudo)}'" onclick="openProfile('${escHtml(c.author_username)}')">
       <div class="comment-item-body">
@@ -3784,6 +4359,18 @@ async function openProfile(username){
   if(!u){ showToast('Utilisateur introuvable','#F87171'); return; }
   profileUser = u;
   document.getElementById('profileAvatar').src = u.avatar||AVATAR_OPTIONS[0];
+  const histEl = document.getElementById('profileAvatarHistory');
+  const hist = (u.avatar_history||[]).filter(a=>a && a!==u.avatar);
+  histEl.innerHTML = hist.length ? hist.map(a=>`<img src="${escHtml(a)}" title="Ancienne photo de profil" onerror="this.style.display='none'">`).join('') : '';
+  const blockBtn = document.getElementById('profileBlockBtn');
+  if(currentUser && currentUser.username !== u.username){
+    blockBtn.style.display = 'flex';
+    const blocked = (currentUser.blocked_users||[]).includes(u.username);
+    blockBtn.classList.toggle('is-blocked', blocked);
+    document.getElementById('profileBlockBtnLabel').textContent = blocked ? 'Débloquer' : 'Bloquer';
+  } else {
+    blockBtn.style.display = 'none';
+  }
   document.getElementById('profileName').textContent = u.display_name||u.username;
   document.getElementById('profileUsername').textContent = '@'+u.username;
   document.getElementById('profileBio').textContent = u.bio||'';
@@ -3791,7 +4378,7 @@ async function openProfile(username){
   const roleName = getRoleDisplay(u);
   const badgeClass = getRoleBadgeClass(u);
   rolesEl.innerHTML = `<span class="profile-role-badge ${badgeClass}">${roleName}</span>`;
-  if(getPermLevel(u) >= 3) rolesEl.innerHTML += `<span class="profile-role-badge profile-role-certified">✓ Certifié</span>`;
+  if(isCertifiedUser(u)) rolesEl.innerHTML += `<span class="profile-role-badge profile-role-certified">✓ Certifié</span>`;
   const online = isOnline(u);
   document.getElementById('profileStatusDot').className = 'profile-status-dot '+(online?'profile-status-online':'profile-status-offline');
   document.getElementById('profileStatusText').textContent = online ? t('statusOnline') : t('statusOffline');
@@ -3803,6 +4390,23 @@ async function openProfile(username){
 }
 document.getElementById('profileClose').addEventListener('click', ()=>{ profileOverlay.classList.remove('open'); document.body.style.overflow=''; });
 profileOverlay.addEventListener('click', e=>{ if(e.target===profileOverlay){ profileOverlay.classList.remove('open'); document.body.style.overflow=''; } });
+
+async function toggleBlockUser(){
+  if(!currentUser || !profileUser || currentUser.username===profileUser.username) return;
+  const blocked = currentUser.blocked_users||[];
+  const isBlocked = blocked.includes(profileUser.username);
+  const newList = isBlocked ? blocked.filter(b=>b!==profileUser.username) : [...blocked, profileUser.username];
+  try{
+    const updated = await sbUpdateUser(currentUser.username, { blocked_users: newList });
+    sessionLogin(updated);
+    showToast(isBlocked ? `✅ ${profileUser.display_name||profileUser.username} débloqué`:`🚫 ${profileUser.display_name||profileUser.username} bloqué`, isBlocked?'#34D399':'#F87171');
+    const blockBtn = document.getElementById('profileBlockBtn');
+    blockBtn.classList.toggle('is-blocked', !isBlocked);
+    document.getElementById('profileBlockBtnLabel').textContent = !isBlocked ? 'Débloquer' : 'Bloquer';
+    if(currentConvId) openConversation(currentConvId);
+  }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
+}
+
 
 // ============================================================
 // ADMIN PANEL
@@ -3870,7 +4474,7 @@ async function renderAdminUsers(){
   for(const u of users){
     const isOwner=u.username===OWNER_USERNAME.toLowerCase();
     const uIsAdmin=getPermLevel(u)>=5;
-    const uIsCert=getPermLevel(u)>=3;
+    const uIsCert=isCertifiedUser(u);
     const uLevel=getPermLevel(u);
     const banned=isBanned(u);
     const online=isOnline(u);
@@ -3889,7 +4493,7 @@ async function renderAdminUsers(){
       </div>
       ${!isOwner?`<div class="admin-user-actions">
         ${!banned?`<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminPermBan('${escHtml(u.username)}')">🔨 Ban</button>`:`<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminUnban('${escHtml(u.username)}')">🔓 Dé-ban</button>`}
-        ${!banned?`<button class="admin-btn admin-mini-btn" style="border-color:rgba(245,158,11,0.4);color:#FCD34D;" onclick="adminTempBanOpen('${escHtml(u.username)}')">⏱ Temp</button>`:''}
+        ${!banned?`<button class="admin-btn admin-mini-btn" style="background:rgba(245,158,11,0.14);border-color:rgba(245,158,11,0.4);color:#FCD34D;" onclick="adminTempBanOpen('${escHtml(u.username)}')">⏱ Temp</button>`:''}
         ${!uIsAdmin?`<button class="admin-btn admin-mini-btn admin-btn-gold" onclick="adminGiveAdmin('${escHtml(u.username)}')">⚙️ Admin</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:rgba(239,68,68,0.3);color:#F87171;" onclick="adminRevokeAdmin('${escHtml(u.username)}')">⊘ Admin</button>`}
         ${!uIsCert?`<button class="admin-btn admin-mini-btn admin-btn-purple" onclick="adminCertify('${escHtml(u.username)}')">✓ Certifier</button>`:`<button class="admin-btn admin-mini-btn" style="border-color:var(--border);color:var(--text-muted);" onclick="adminUncertify('${escHtml(u.username)}')">⊘ Certif</button>`}
         ${canDelete?`<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteUser('${escHtml(u.username)}')">🗑</button>`:''}
@@ -3934,20 +4538,89 @@ async function renderAdminScripts(){
   const canEdit = canManageScripts(currentUser);
   let html='';
   for(const data of scriptsCache){
+    const isUtil = data.category==='util';
+    const originLabel = isUtil ? (data.uses_unc ? 'Interne' : 'Externe') : null;
     html+=`<div class="admin-script-card">
       <div class="admin-script-card-header">
         <span class="admin-script-name">${escHtml(data.name)}</span>
         <div class="admin-script-actions">
+          ${isUtil && canEdit?`<button class="admin-btn admin-mini-btn" onclick="adminToggleScriptOrigin('${data.id}', ${!!data.uses_unc})">🔁 ${originLabel}</button>`:''}
+          ${canEdit?`<button class="admin-btn admin-mini-btn admin-btn-purple" onclick="adminEditScript('${data.id}')">✏️ Modifier</button>`:''}
           ${canEdit?`<button class="admin-btn admin-mini-btn admin-btn-red" onclick="adminDeleteScript('${data.id}')">🗑 Supprimer</button>`:''}
         </div>
       </div>
-      <div style="font-size:0.72rem;color:var(--text-muted);">ID: <code>${escHtml(data.id)}</code> · ${escHtml(data.category)} · ${escHtml(data.status)}</div>
+      <div style="font-size:0.72rem;color:var(--text-muted);">ID: <code>${escHtml(data.id)}</code> · ${escHtml(data.category)} · ${escHtml(data.status)}${originLabel?' · '+originLabel:''}</div>
     </div>`;
   }
   document.getElementById('adminScriptsList').innerHTML=html||'<p style="color:var(--text-muted);font-size:0.82rem;">Aucun script.</p>';
-  const sel=document.getElementById('adminCommentFilter');
-  if(sel) sel.innerHTML=scriptsCache.map(s=>`<option value="${s.id}">${escHtml(s.name)}</option>`).join('');
+  buildAdminCommentFilterDropdown();
 }
+
+// Custom dropdown logic (replaces native <select id="adminCommentFilter">)
+let adminCommentFilterValue = null;
+function buildAdminCommentFilterDropdown(){
+  const menu = document.getElementById('adminCommentFilterMenu');
+  const label = document.getElementById('adminCommentFilterLabel');
+  if(!menu) return;
+  if(!adminCommentFilterValue && scriptsCache.length > 0) adminCommentFilterValue = scriptsCache[0].id;
+  menu.innerHTML = scriptsCache.map(s => `<div class="custom-select-option${s.id===adminCommentFilterValue?' selected':''}" data-value="${escHtml(s.id)}" onclick="selectAdminCommentFilter('${escHtml(s.id)}')">${escHtml(s.name)}</div>`).join('') || '<div class="custom-select-option" style="color:var(--text-muted);">Aucun script</div>';
+  const current = scriptsCache.find(s=>s.id===adminCommentFilterValue);
+  if(label) label.textContent = current ? current.name : 'Sélectionner un script...';
+}
+function selectAdminCommentFilter(sid){
+  adminCommentFilterValue = sid;
+  document.getElementById('adminCommentFilterWrap')?.classList.remove('open');
+  buildAdminCommentFilterDropdown();
+  renderAdminComments();
+}
+document.getElementById('adminCommentFilterTrigger')?.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  document.getElementById('adminCommentFilterWrap')?.classList.toggle('open');
+});
+document.addEventListener('click', (e)=>{
+  if(!e.target.closest('#adminCommentFilterWrap')) document.getElementById('adminCommentFilterWrap')?.classList.remove('open');
+});
+
+let editingScriptId = null;
+
+function fillScriptForm(data){
+  document.getElementById('newScriptName').value = data.name || '';
+  document.getElementById('newScriptCategory').value = data.category || 'game';
+  if(document.getElementById('newScriptUsesUnc')) document.getElementById('newScriptUsesUnc').checked = !!data.uses_unc;
+  document.getElementById('newScriptGameName').value = data.game_name || '';
+  document.getElementById('newScriptGameLink').value = data.game_link || '';
+  document.getElementById('newScriptCreator').value = data.creator || '';
+  document.getElementById('newScriptPlayers').value = data.active_players || '';
+  document.getElementById('newScriptBanner').value = data.banner || '';
+  document.getElementById('newScriptFile').value = data.script_file || '';
+  document.getElementById('newScriptDesc').value = data.description || '';
+  document.getElementById('newScriptCode').value = data.script || '';
+  document.getElementById('newScriptDisplay').value = data.script_display || '';
+  const statusKey = {Actif:'active',Nouveau:'new',Populaire:'popular'}[data.status_label] || data.status || 'active';
+  document.getElementById('newScriptStatus').value = ['active','new','popular'].includes(data.status) ? data.status : statusKey;
+}
+
+function adminEditScript(sid){
+  if(!canManageScripts(currentUser)){ showToast('⛔ Permissions insuffisantes','#F87171'); return; }
+  const data = scriptsCache.find(s=>s.id===sid);
+  if(!data) return;
+  editingScriptId = sid;
+  fillScriptForm(data);
+  document.getElementById('scriptFormTitle').textContent = '✏️ Modifier "' + data.name + '"';
+  document.getElementById('addScriptBtn').textContent = '💾 Enregistrer les modifications';
+  document.getElementById('cancelEditScriptBtn').style.display = 'block';
+  document.getElementById('atab-scripts')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function cancelEditScript(){
+  editingScriptId = null;
+  ['newScriptName','newScriptGameName','newScriptGameLink','newScriptCreator','newScriptPlayers','newScriptBanner','newScriptFile','newScriptDesc','newScriptCode','newScriptDisplay'].forEach(id2=>{ const el=document.getElementById(id2); if(el) el.value=''; });
+  if(document.getElementById('newScriptUsesUnc')) document.getElementById('newScriptUsesUnc').checked = false;
+  document.getElementById('scriptFormTitle').textContent = '➕ Ajouter un nouveau script';
+  document.getElementById('addScriptBtn').textContent = '➕ Ajouter le script';
+  document.getElementById('cancelEditScriptBtn').style.display = 'none';
+}
+document.getElementById('cancelEditScriptBtn').addEventListener('click', cancelEditScript);
 
 document.getElementById('addScriptBtn').addEventListener('click', async ()=>{
   if(!canManageScripts(currentUser)){ showToast('⛔ Permissions insuffisantes','#F87171'); return; }
@@ -3963,30 +4636,51 @@ document.getElementById('addScriptBtn').addEventListener('click', async ()=>{
   const script=document.getElementById('newScriptCode').value.trim();
   const display=document.getElementById('newScriptDisplay').value.trim();
   const status=document.getElementById('newScriptStatus').value;
+  const usesUnc=document.getElementById('newScriptUsesUnc')?.checked || false;
   if(!name||!script){ showToast('⚠️ Nom et script requis.','#F87171'); return; }
-  const id=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+(scriptsCache.find(s=>s.id===name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''))?'-'+Date.now():'');
   const statusLabel={active:'Actif',new:'Nouveau',popular:'Populaire'}[status]||'Actif';
+  if(editingScriptId){
+    try{
+      await sbUpdateScript(editingScriptId, {name,category,uses_unc:category==='util'?usesUnc:null,status,status_label:statusLabel,banner:banner||null,game_name:gameName||null,game_link:gameLink||null,creator:creator||'Sentinel Team',active_players:players||null,script_file:file||name.toLowerCase().replace(/ /g,'-')+'.lua',description:desc||'',script,script_display:display||script});
+      await sbLoadScripts(); renderAllCards(); renderAdminScripts();
+      showToast(`✅ Script "${name}" modifié !`,'#34D399');
+      cancelEditScript();
+    }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
+    return;
+  }
+  const id=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+(scriptsCache.find(s=>s.id===name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''))?'-'+Date.now():'');
   try{
-    await sbAddScript({id,name,category,status,status_label:statusLabel,banner:banner||null,game_name:gameName||null,game_link:gameLink||null,creator:creator||'Sentinel Team',active_players:players||null,maturity:null,script_file:file||name.toLowerCase().replace(/ /g,'-')+'.lua',description:desc||'',script,script_display:display||script});
+    await sbAddScript({id,name,category,uses_unc:category==='util'?usesUnc:null,status,status_label:statusLabel,banner:banner||null,game_name:gameName||null,game_link:gameLink||null,creator:creator||'Sentinel Team',active_players:players||null,maturity:null,script_file:file||name.toLowerCase().replace(/ /g,'-')+'.lua',description:desc||'',script,script_display:display||script});
     await sbLoadScripts(); renderAllCards(); renderAdminScripts();
     showToast(`✅ Script "${name}" ajouté !`,'#34D399');
     ['newScriptName','newScriptGameName','newScriptGameLink','newScriptCreator','newScriptPlayers','newScriptBanner','newScriptFile','newScriptDesc','newScriptCode','newScriptDisplay'].forEach(id2=>{ const el=document.getElementById(id2); if(el) el.value=''; });
   }catch(e){ showToast('Erreur: '+e.message,'#F87171'); }
 });
 
+async function adminToggleScriptOrigin(sid, current){
+  if(!canManageScripts(currentUser)){ showToast('⛔ Permissions insuffisantes','#F87171'); return; }
+  await sbUpdateScript(sid, { uses_unc: !current });
+  await sbLoadScripts(); renderAllCards(); renderAdminScripts();
+  showToast(`🔁 Script marqué ${!current ? 'Interne' : 'Externe'}.`,'#A78BFA');
+}
 async function adminDeleteScript(sid){
   if(!canManageScripts(currentUser)){ showToast('⛔ Permissions insuffisantes','#F87171'); return; }
-  if(!confirm('Supprimer ce script ?')) return;
-  await sbDeleteScript(sid);
-  await sbLoadScripts(); renderAllCards(); renderAdminScripts();
-  showToast('🗑️ Script supprimé.','#F87171');
+  openConfirm({
+    title: 'Supprimer ce script ?',
+    sub: 'Cette action est irréversible.',
+    yesLabel: 'Supprimer',
+    onYes: async () => {
+      await sbDeleteScript(sid);
+      await sbLoadScripts(); renderAllCards(); renderAdminScripts();
+      showToast('🗑️ Script supprimé.','#F87171');
+    }
+  });
 }
 
 // ADMIN COMMENTS
 async function renderAdminComments(){
-  const sel=document.getElementById('adminCommentFilter');
   await renderAdminScripts();
-  const sid=sel?.value; if(!sid) return;
+  const sid=adminCommentFilterValue; if(!sid) return;
   const comments=await sbGetComments(sid);
   let html='';
   if(comments.length===0) html='<p style="color:var(--text-muted);font-size:0.82rem;padding:1rem 0;">Aucun commentaire.</p>';
@@ -4002,7 +4696,6 @@ async function renderAdminComments(){
   });
   document.getElementById('adminCommentsList').innerHTML=html;
 }
-document.getElementById('adminCommentFilter').addEventListener('change', ()=>renderAdminComments());
 async function adminDeleteCommentById(id, sid){
   await sbDeleteComment(id);
   renderAdminComments();
@@ -4048,6 +4741,13 @@ function switchPage(pageId) {
     section.classList.toggle('active', section.id === 'page-' + pageId);
   });
   currentPage = pageId;
+  // Scroll smooth vers le haut de la zone de contenu lors du changement de catégorie
+  const pageNav = document.getElementById('pageNavInner')?.closest('.page-nav') || document.getElementById('pageNavInner');
+  if (pageNav && typeof pageNav.scrollIntoView === 'function') {
+    pageNav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
   // Si la page est Executors, charger les executors
   if (pageId === 'executors') {
     loadExecutors();
@@ -4208,22 +4908,64 @@ async function loadExecutors() {
   const grid = document.getElementById('execGrid');
   grid.innerHTML = `<div class="exec-loading"><div class="exec-loading-spinner"></div>${t('execLoading')}</div>`;
   try {
-    // Essayer l'API avec un timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
-    const response = await fetch('https://weao.xyz/api/executors', { signal: controller.signal });
-    clearTimeout(timeoutId);
-    if (!response.ok) throw new Error('Erreur API');
-    const data = await response.json();
-    executorsCache = data.executors || [];
+    executorsCache = await fetchWeaoExecutors();
     if (executorsCache.length === 0) throw new Error('Aucun executor reçu');
   } catch (error) {
     console.warn('[loadExecutors] Utilisation du fallback:', error.message);
     executorsCache = FALLBACK_EXECUTORS;
-    // Optionnel: afficher un toast pour informer l'utilisateur
-    // showToast('⚠️ Chargement des executors avec données de secours', '#FCD34D');
   }
   renderExecutors();
+}
+
+async function fetchWeaoExecutors() {
+  const urls = [
+    'https://weao.xyz/api/status/exploits',
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://weao.xyz/api/status/exploits')
+  ];
+  let lastErr = null;
+  for (const url of urls) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeoutId);
+      if (!response.ok) throw new Error('Erreur API WEAO (' + response.status + ')');
+      const data = await response.json();
+      const raw = Array.isArray(data) ? data : (data.exploits || data.executors || []);
+      if (!Array.isArray(raw) || raw.length === 0) throw new Error('Réponse WEAO vide');
+      return raw.filter(ex => !ex.hidden).map(mapWeaoExecutor);
+    } catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('Impossible de joindre WEAO');
+}
+
+function mapWeaoExecutor(ex) {
+  return {
+    name: ex.title,
+    version: ex.version || null,
+    price: ex.free ? 'Gratuit' : 'Payant',
+    cost: ex.cost || null,
+    detected: !!ex.detected,
+    undetectable: !ex.detected,
+    updated: !!ex.updateStatus,
+    unc: !!ex.uncStatus,
+    uncPercentage: typeof ex.uncPercentage === 'number' ? ex.uncPercentage : null,
+    suncPercentage: typeof ex.suncPercentage === 'number' ? ex.suncPercentage : null,
+    key: !!ex.keysystem,
+    decompiler: !!ex.decompiler,
+    multiInject: !!ex.multiInject,
+    raknet: !!ex.raknet,
+    clientmods: !!ex.clientmods,
+    platform: ex.platform || null,
+    type: ex.type || ex.extype || null,
+    rbxversion: ex.rbxversion || null,
+    updatedDate: ex.updatedDate || null,
+    beta: !!ex.beta,
+    successRate: typeof ex.suncPercentage === 'number' ? ex.suncPercentage : (typeof ex.uncPercentage === 'number' ? ex.uncPercentage : null),
+    buyLink: ex.purchaselink || null,
+    website: ex.websitelink || null,
+    discord: ex.discordlink || null
+  };
 }
 
 function renderExecutors() {
@@ -4253,7 +4995,12 @@ function renderExecutors() {
     return;
   }
 
-  grid.innerHTML = filtered.map(ex => {
+  // Un executor est "external" s'il n'a ni support UNC ni sUNC
+  const isExternalExec = (ex) => !ex.unc && typeof ex.uncPercentage !== 'number' && typeof ex.suncPercentage !== 'number';
+  const internalExecs = filtered.filter(ex => !isExternalExec(ex));
+  const externalExecs = filtered.filter(ex => isExternalExec(ex));
+
+  const renderExecCard = (ex) => {
     const badges = [];
     if (ex.price === 'Free' || ex.price === 'Gratuit') badges.push(`<span class="exec-badge badge-free">${t('badgeFree')}</span>`);
     else if (ex.price) badges.push(`<span class="exec-badge badge-paid">${t('badgePaid')}</span>`);
@@ -4263,15 +5010,18 @@ function renderExecutors() {
     else badges.push(`<span class="exec-badge badge-outdated">${t('badgeOutdated')}</span>`);
     if (ex.unc) badges.push(`<span class="exec-badge badge-unc">${t('badgeUNC')}</span>`);
     if (ex.key) badges.push(`<span class="exec-badge badge-key">${t('badgeKey')}</span>`);
+    if (ex.decompiler) badges.push(`<span class="exec-badge badge-unc" style="background:rgba(56,189,248,0.15);color:#7DD3FC;">⚙️ Décompileur</span>`);
+    if (ex.multiInject) badges.push(`<span class="exec-badge badge-unc" style="background:rgba(52,211,153,0.15);color:#34D399;">🧬 Multi-inject</span>`);
+    if (ex.beta) badges.push(`<span class="exec-badge badge-outdated" style="background:rgba(252,211,77,0.15);color:#FCD34D;">🧪 Bêta</span>`);
     if (ex.status === 'abandonné') {
       badges.push(`<span class="exec-badge badge-outdated" style="background:rgba(239,68,68,0.2);color:#F87171;">${t('badgeAbandoned')}</span>`);
     }
 
     const stats = [
-      { label: t('statPrice'), value: ex.price, type: 'price' },
-      { label: t('statDetection'), value: ex.detection, type: 'detection' },
-      { label: t('statUpdates'), value: ex.updates, type: 'updates' },
-      { label: t('statSupport'), value: ex.support, type: 'support' }
+      { label: t('statPrice'), value: ex.cost ? ex.cost : ex.price, type: 'price' },
+      { label: 'Plateforme', value: ex.platform, type: 'raw' },
+      { label: 'Dernière MAJ', value: ex.updatedDate, type: 'raw' },
+      { label: t('statDetection'), value: ex.detected ? 'Élevée' : 'Très faible', type: 'detection' }
     ];
 
     const links = [];
@@ -4279,7 +5029,8 @@ function renderExecutors() {
     if (ex.website) links.push(`<a href="${ex.website}" target="_blank" rel="noopener" class="exec-link website">🌐 ${t('btnSite')}</a>`);
     if (ex.discord) links.push(`<a href="${ex.discord}" target="_blank" rel="noopener" class="exec-link discord">💬 ${t('btnDiscord')}</a>`);
 
-    const sunc = ex.successRate !== undefined ? Math.min(Math.max(parseInt(ex.successRate), 0), 100) : null;
+    const uncPct = typeof ex.uncPercentage === 'number' ? ex.uncPercentage : null;
+    const suncPct = typeof ex.suncPercentage === 'number' ? ex.suncPercentage : null;
 
     return `<div class="exec-card">
       <div class="exec-card-top">
@@ -4290,16 +5041,27 @@ function renderExecutors() {
         <div class="exec-badges">${badges.join('')}</div>
       </div>
       <div class="exec-stats">
-        ${stats.map(s => `<div class="exec-stat"><div class="exec-stat-label">${s.label}</div><div class="exec-stat-value">${escHtml(translateExecutorValue(s.type, s.value))}</div></div>`).join('')}
+        ${stats.map(s => `<div class="exec-stat"><div class="exec-stat-label">${escHtml(s.label)}</div><div class="exec-stat-value">${s.type === 'raw' ? escHtml(s.value || '—') : escHtml(translateExecutorValue(s.type, s.value))}</div></div>`).join('')}
       </div>
-      ${sunc !== null ? `
+      ${suncPct !== null ? `
       <div class="exec-sunc-bar">
         <div class="exec-sunc-label">
-          <span class="exec-sunc-name">${t('successRate')}</span>
-          <span class="exec-sunc-pct">${sunc}%</span>
+          <span class="exec-sunc-name">sUNC</span>
+          <span class="exec-sunc-pct">${suncPct}%</span>
         </div>
         <div class="exec-bar-track">
-          <div class="exec-bar-fill" style="width:${sunc}%"></div>
+          <div class="exec-bar-fill" style="width:${suncPct}%"></div>
+        </div>
+      </div>
+      ` : ''}
+      ${uncPct !== null ? `
+      <div class="exec-sunc-bar">
+        <div class="exec-sunc-label">
+          <span class="exec-sunc-name">UNC</span>
+          <span class="exec-sunc-pct">${uncPct}%</span>
+        </div>
+        <div class="exec-bar-track">
+          <div class="exec-bar-fill" style="width:${uncPct}%"></div>
         </div>
       </div>
       ` : ''}
@@ -4307,7 +5069,17 @@ function renderExecutors() {
         ${links.join('')}
       </div>
     </div>`;
-  }).join('');
+  };
+
+  let html = internalExecs.map(renderExecCard).join('');
+  if (externalExecs.length > 0) {
+    html += `<div class="exec-external-divider" style="grid-column:1/-1;display:flex;align-items:center;gap:0.75rem;margin:1.5rem 0 0.75rem;">
+      <span style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:600;white-space:nowrap;">${t('execExternalLabel')}</span>
+      <div style="height:1px;flex:1;background:var(--border);"></div>
+    </div>`;
+    html += externalExecs.map(renderExecCard).join('');
+  }
+  grid.innerHTML = html;
 }
 
 document.getElementById('execSearch').addEventListener('input', function() {
@@ -4476,7 +5248,7 @@ async function sbGetConversations(username) {
   if (error) { console.error('[sbGetConversations]', error); return []; }
   return data || [];
 }
-async function sbSendMessage(conversationId, content, type = 'text') {
+async function sbSendMessage(conversationId, content, type = 'text', meta = {}) {
   if (!currentUser) return;
   const msg = {
     conversation_id: conversationId,
@@ -4485,13 +5257,57 @@ async function sbSendMessage(conversationId, content, type = 'text') {
     sender_avatar: currentUser.avatar || AVATAR_OPTIONS[0],
     content,
     type,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
+    file_name: meta.file_name || null,
+    file_size: meta.file_size || null,
+    file_mime: meta.file_mime || null,
+    duration_seconds: meta.duration_seconds || null
   };
   const { data, error } = await sb.from('messages').insert(msg).select('*').single();
   if (error) throw new Error('Erreur envoi message: ' + error.message);
   // Update conversation last_message_at
   await sb.from('conversations').update({ last_message_at: msg.created_at }).eq('id', conversationId);
   return data;
+}
+async function sbEditMessage(messageId, newContent) {
+  const { error } = await sb.from('messages').update({ content: newContent, edited_at: new Date().toISOString() }).eq('id', messageId);
+  if (error) throw new Error('Erreur modification message: ' + error.message);
+}
+async function sbDeleteMessage(messageId) {
+  const { error } = await sb.from('messages').update({ is_deleted: true, content: '' }).eq('id', messageId);
+  if (error) throw new Error('Erreur suppression message: ' + error.message);
+}
+async function sbHardDeleteMessage(messageId) {
+  const { error } = await sb.from('messages').delete().eq('id', messageId);
+  if (error) throw new Error('Erreur suppression définitive: ' + error.message);
+}
+async function sbToggleReaction(messageId, emoji, username) {
+  const { data: msg, error: getErr } = await sb.from('messages').select('reactions').eq('id', messageId).maybeSingle();
+  if (getErr || !msg) return;
+  const reactions = msg.reactions || {};
+  // Remove user from any existing emoji reaction first
+  let hadThisEmoji = false;
+  for (const key of Object.keys(reactions)) {
+    if (reactions[key]?.includes(username)) {
+      if (key === emoji) hadThisEmoji = true;
+      reactions[key] = reactions[key].filter(u => u !== username);
+      if (reactions[key].length === 0) delete reactions[key];
+    }
+  }
+  if (!hadThisEmoji) {
+    reactions[emoji] = reactions[emoji] || [];
+    reactions[emoji].push(username);
+  }
+  const { error } = await sb.from('messages').update({ reactions }).eq('id', messageId);
+  if (error) throw new Error('Erreur réaction: ' + error.message);
+}
+async function sbUploadMessageFile(conversationId, file) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const path = `${conversationId}/${Date.now()}_${safeName}`;
+  const { error } = await sb.storage.from('sentinel-messages').upload(path, file, { cacheControl: '3600', upsert: false });
+  if (error) throw new Error('Erreur upload: ' + error.message);
+  const { data } = sb.storage.from('sentinel-messages').getPublicUrl(path);
+  return data.publicUrl;
 }
 async function sbGetMessages(conversationId) {
   const { data, error } = await sb.from('messages').select('*')
@@ -4504,6 +5320,13 @@ async function sbGetConversation(id) {
   const { data, error } = await sb.from('conversations').select('*').eq('id', id).maybeSingle();
   if (error) { console.error('[sbGetConversation]', error); return null; }
   return data;
+}
+async function sbMarkConversationRead(convId, username) {
+  if (!convId || !username) return;
+  const conv = await sbGetConversation(convId);
+  if (!conv) return;
+  const last_read = { ...(conv.last_read || {}), [username]: new Date().toISOString() };
+  await sb.from('conversations').update({ last_read }).eq('id', convId);
 }
 async function sbLeaveConversation(convId, username) {
   const conv = await sbGetConversation(convId);
@@ -4578,10 +5401,47 @@ async function sbSendInboxMessage(toUsername, content) {
 let notifPanelOpen = false;
 let friendsPanelOpen = false;
 let notifCache = [];
+let seenNotifIds = new Set();
+
+function playNotifSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = 740;
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.32);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.33);
+  } catch(e) {}
+}
 
 async function loadAndRenderNotifications() {
   if (!currentUser) return;
-  notifCache = await sbGetNotifications(currentUser.username);
+  const all = await sbGetNotifications(currentUser.username);
+  const prefs = getNotifPrefs();
+  const TYPE_GROUP = { inbox_dm:'msg', new_message:'msg', friend_request:'friend', friend_accept:'friend', like:'vote', comment_like:'vote', new_script:'vote' };
+  notifCache = all.filter(n => prefs[TYPE_GROUP[n.type] || 'vote'] !== false);
+
+  // Detect newly-arrived unread notifications for browser/sound alerts
+  const isFirstLoad = seenNotifIds.size === 0;
+  const freshOnes = notifCache.filter(n => !n.read && !seenNotifIds.has(n.id));
+  if (!isFirstLoad) {
+    let soundPlayed = false;
+    freshOnes.forEach(n => {
+      const group = TYPE_GROUP[n.type] || 'vote';
+      if (group === 'msg' && prefs.msg !== false) {
+        if (prefs.sound !== false && !soundPlayed) { playNotifSound(); soundPlayed = true; }
+        if (window.Notification && Notification.permission === 'granted') {
+          const plainText = (n.text || `${n.from_username || 'Quelqu\'un'} t'a envoyé un message`).replace(/<[^>]*>/g, '');
+          new Notification('💬 Nouveau message', { body: plainText, icon: currentUser?.avatar || AVATAR_OPTIONS[0] });
+        }
+      }
+    });
+  }
+  notifCache.forEach(n => seenNotifIds.add(n.id));
+
   renderNotifications();
   updateNotifBadge();
 }
@@ -4612,11 +5472,16 @@ function renderNotifications() {
     'friend_request': { cls: 'ni-fr', emoji: '👤' },
     'friend_accept': { cls: 'ni-fr', emoji: '✅' },
     'inbox_dm': { cls: 'ni-msg', emoji: '💬' },
+    'new_message': { cls: 'ni-msg', emoji: '💬' },
     'vote_on_script': { cls: 'ni-vote', emoji: '⭐' }
   };
   list.innerHTML = notifCache.map(n => {
     const icon = ICON_MAP[n.type] || { cls: 'ni-msg', emoji: '🔔' };
     let actionsHtml = '';
+    let clickAttr = '';
+    if (n.type === 'new_message' && n.data?.conv_id) {
+      clickAttr = ` onclick="openConversation('${n.data.conv_id}');notifPanelOpen=false;document.getElementById('notifPanel')?.classList.remove('open');"`;
+    }
     if (n.type === 'friend_request' && n.data?.requester && !n.read) {
       actionsHtml = `<div class="notif-actions">
         <button class="notif-action-btn accept" onclick="acceptFriendRequestFromNotif('${n.id}','${n.data.requester}')">Accepter</button>
@@ -4629,7 +5494,7 @@ function renderNotifications() {
         <button class="notif-action-btn decline" onclick="declineInboxDm('${n.id}','${n.data.conv_id}')">Supprimer</button>
       </div>`;
     }
-    return `<div class="notif-item${n.read ? '' : ' unread'}">
+    return `<div class="notif-item${n.read ? '' : ' unread'}"${clickAttr}>
       <div class="notif-icon ${icon.cls}">${icon.emoji}</div>
       <div class="notif-body">
         <div class="notif-text">${n.text}</div>
@@ -4976,6 +5841,9 @@ async function openConversation(convId) {
     headerName.textContent = conv.group_name;
     headerSub.textContent = `${conv.participants.length} membres`;
     membersBtn.style.display = 'flex';
+    document.getElementById('msgChatBlockBtn').style.display = 'none';
+    document.getElementById('msgInputZone').style.opacity = '';
+    document.getElementById('msgInputZone').style.pointerEvents = '';
     // Only show group panel if creator
     if (conv.creator === currentUser?.username) {
       document.getElementById('groupMembersPanel').classList.add('open');
@@ -4991,6 +5859,31 @@ async function openConversation(convId) {
     headerSub.textContent = online ? '🟢 En ligne' : '⚪ Hors ligne';
     membersBtn.style.display = 'none';
     document.getElementById('groupMembersPanel').classList.remove('open');
+
+    const blockBtn = document.getElementById('msgChatBlockBtn');
+    const iBlockedThem = (currentUser?.blocked_users||[]).includes(otherUsername);
+    const theyBlockedMe = (u?.blocked_users||[]).includes(currentUser?.username);
+    blockBtn.style.display = 'flex';
+    blockBtn.style.color = iBlockedThem ? '#34D399' : '';
+    blockBtn.title = iBlockedThem ? 'Débloquer' : 'Bloquer';
+    blockBtn.onclick = async () => {
+      const blocked = currentUser.blocked_users||[];
+      const newList = iBlockedThem ? blocked.filter(b=>b!==otherUsername) : [...blocked, otherUsername];
+      const updated = await sbUpdateUser(currentUser.username, { blocked_users: newList });
+      sessionLogin(updated);
+      showToast(iBlockedThem ? '✅ Débloqué' : '🚫 Bloqué', iBlockedThem?'#34D399':'#F87171');
+      openConversation(convId);
+    };
+
+    const inputZone = document.getElementById('msgInputZone');
+    if (theyBlockedMe || iBlockedThem) {
+      inputZone.style.opacity = '0.5';
+      inputZone.style.pointerEvents = 'none';
+      headerSub.textContent = iBlockedThem ? '🚫 Tu as bloqué cet utilisateur' : '🚫 Impossible de lui envoyer un message';
+    } else {
+      inputZone.style.opacity = '';
+      inputZone.style.pointerEvents = '';
+    }
   }
 
   // Input zone avatar
@@ -5000,64 +5893,243 @@ async function openConversation(convId) {
   }
 
   await renderMessages(convId);
+  sbMarkConversationRead(convId, currentUser?.username);
 
   // Setup polling
   clearInterval(msgPollingInterval);
-  msgPollingInterval = setInterval(() => renderMessages(convId), 3000);
+  msgPollingInterval = setInterval(async () => {
+    await renderMessages(convId);
+    sbMarkConversationRead(convId, currentUser?.username);
+  }, 3000);
 }
+
+function formatBytes(bytes) {
+  if (!bytes) return '';
+  if (bytes < 1024) return bytes + ' o';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' Ko';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' Mo';
+}
+function formatDuration(sec) {
+  sec = Math.round(sec || 0);
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return m + ':' + String(s).padStart(2, '0');
+}
+function linkifyText(escapedText) {
+  return escapedText.replace(/((https?:\/\/|www\.)[^\s<]+)/g, (match) => {
+    const href = match.startsWith('http') ? match : 'https://' + match;
+    return `<a class="msg-inline-link" href="${href}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+  });
+}
+const REACTION_EMOJIS = ['👍','❤️','😂','😮','😢','🔥'];
 
 async function renderMessages(convId) {
   if (convId !== currentConvId) return;
+  // Don't tear down the DOM (and reset playback) while a video/audio is actively playing
+  const listEl = document.getElementById('msgMessagesList');
+  if (listEl) {
+    const playing = listEl.querySelector('video, audio');
+    if (playing && !playing.paused && !playing.ended) return;
+  }
   const msgs = await sbGetMessages(convId);
-  const area = document.getElementById('msgMessagesArea');
-  if (!area) return;
+  const list = document.getElementById('msgMessagesList');
+  if (!list) return;
+  const conv = await sbGetConversation(convId);
+  const otherUsernames = (conv?.participants || []).filter(p => p !== currentUser?.username);
+  const lastRead = conv?.last_read || {};
+  let seenAt = null;
+  for (const u of otherUsernames) {
+    const r = lastRead[u] ? new Date(lastRead[u]) : null;
+    if (r && (!seenAt || r > seenAt)) seenAt = r;
+  }
 
   // Group messages by sender & proximity
   let html = '';
   let lastDate = '';
   let lastSender = '';
   let groupOpen = false;
+  let groupIsMine = false;
+  let groupMsgs = []; // messages in the currently open group, for end-of-group timestamp/seen
+
+  function closeGroup() {
+    if (!groupOpen) return;
+    const lastMsg = groupMsgs[groupMsgs.length - 1];
+    html += `<div class="msg-bubble-time">${new Date(lastMsg?.created_at).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })}</div>`;
+    if (groupIsMine && seenAt && lastMsg?.created_at && seenAt >= new Date(lastMsg.created_at) && lastMsg === msgs[msgs.length - 1]) {
+      html += `<div class="msg-bubble-seen">Vu</div>`;
+    }
+    html += `</div></div>`; // close .msg-bubble-stack then .msg-bubble-group
+    groupOpen = false;
+    groupMsgs = [];
+  }
 
   for (let i = 0; i < msgs.length; i++) {
     const m = msgs[i];
     const d = new Date(m.created_at);
     const dateStr = d.toLocaleDateString('fr');
     if (dateStr !== lastDate) {
-      if (groupOpen) { html += '</div>'; groupOpen = false; }
+      closeGroup();
       lastDate = dateStr;
       lastSender = '';
       html += `<div class="msg-date-separator">${dateStr}</div>`;
     }
     const isMine = m.sender_username === currentUser?.username;
     const sameAsPrev = m.sender_username === lastSender;
-    if (!sameAsPrev || msgs[i - 1]?.sender_username !== m.sender_username) {
-      if (groupOpen) html += '</div>';
+    if (!sameAsPrev) {
+      closeGroup();
       html += `<div class="msg-bubble-group${isMine ? ' mine' : ''}">
         <img class="msg-bubble-avatar" src="${escHtml(m.sender_avatar || AVATAR_OPTIONS[0])}" title="${escHtml(m.sender_username)}" onerror="this.src='${AVATAR_OPTIONS[0]}'">
         <div class="msg-bubble-stack">
-          ${!isMine && !sameAsPrev ? `<div class="msg-bubble-sender">${escHtml(m.sender_display || m.sender_username)}</div>` : ''}`;
+          ${!isMine ? `<div class="msg-bubble-sender">${escHtml(m.sender_display || m.sender_username)}</div>` : ''}`;
       groupOpen = true;
+      groupIsMine = isMine;
       lastSender = m.sender_username;
     }
+    groupMsgs.push(m);
 
-    if (m.type === 'gif') {
+    // Toolbar (react / edit / delete)
+    let toolbarHtml = '';
+    if (m.is_deleted) {
+      if (isMine) {
+        toolbarHtml = `<div class="msg-toolbar">
+          <button class="msg-toolbar-btn" title="Supprimer définitivement" onclick="deleteMessageConfirm('${m.id}', true)">🗑️</button>
+        </div>`;
+      }
+    } else {
+      toolbarHtml = `<div class="msg-toolbar">
+        <div style="position:relative;">
+          <button class="msg-toolbar-btn" title="Réagir" onclick="openReactPicker('${m.id}', this)">😀</button>
+          <div class="msg-react-picker" id="reactPicker_${m.id}">
+            ${REACTION_EMOJIS.map(e => `<button onclick="reactToMessage('${m.id}','${e}')">${e}</button>`).join('')}
+          </div>
+        </div>
+        ${isMine && m.type === 'text' ? `<button class="msg-toolbar-btn" title="Modifier" onclick="startEditMessage('${m.id}')">✏️</button>` : ''}
+        ${isMine ? `<button class="msg-toolbar-btn" title="Supprimer" onclick="deleteMessageConfirm('${m.id}')">🗑️</button>` : ''}
+      </div>`;
+    }
+
+    let bubbleInner = '';
+    if (m.is_deleted) {
+      bubbleInner = `<div class="msg-bubble${isMine ? ' mine' : ''}"><span class="msg-bubble-deleted">🚫 Message supprimé</span></div>`;
+    } else if (m.type === 'gif') {
       const isSaved = savedGifsCache.includes(m.content);
-      html += `<div class="msg-bubble gif-bubble">
+      bubbleInner = `<div class="msg-bubble gif-bubble">
         <div class="msg-gif-wrap">
-          <img class="msg-gif-img" src="${escHtml(m.content)}" alt="GIF" loading="lazy">
-          <button class="msg-gif-save-btn${isSaved ? ' saved' : ''}" onclick="toggleSaveGif('${escHtml(m.content)}', this)" title="${isSaved ? 'Retirer des favoris' : 'Sauvegarder'}">★</button>
+          <img class="msg-gif-img" src="${escHtml(m.content)}" alt="GIF" loading="lazy" onclick="openMediaLightbox('image','${escHtml(m.content)}','gif')">
+          <button class="msg-gif-save-btn${isSaved ? ' saved' : ''}" onclick="event.stopPropagation();toggleSaveGif('${escHtml(m.content)}', this)" title="${isSaved ? 'Retirer des favoris' : 'Sauvegarder'}"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2.5 15.09 8.76 22 9.77 17 14.64 18.18 21.52 12 18.27 5.82 21.52 7 14.64 2 9.77 8.91 8.76 12 2.5"/></svg></button>
         </div>
       </div>`;
+    } else if (m.type === 'image') {
+      bubbleInner = `<div class="msg-bubble image-bubble"><img src="${escHtml(m.content)}" alt="${escHtml(m.file_name || 'image')}" loading="lazy" onclick="openMediaLightbox('image','${escHtml(m.content)}','${escHtml(m.file_name || 'image.png')}')"></div>`;
+    } else if (m.type === 'file' && (m.file_mime || '').startsWith('video/')) {
+      bubbleInner = `<div class="msg-bubble video-bubble"><video src="${escHtml(m.content)}" preload="metadata" onclick="openMediaLightbox('video','${escHtml(m.content)}','${escHtml(m.file_name || 'video.mp4')}')"></video></div>`;
+    } else if (m.type === 'file') {
+      bubbleInner = `<div class="msg-bubble${isMine ? ' mine' : ''}" style="background:transparent;border:none;padding:0;">
+        <a class="msg-file-card" href="${escHtml(m.content)}" target="_blank" download="${escHtml(m.file_name || '')}">
+          <div class="msg-file-icon">📄</div>
+          <div class="msg-file-info">
+            <div class="msg-file-name">${escHtml(m.file_name || 'Fichier')}</div>
+            <div class="msg-file-size">${escHtml(formatBytes(m.file_size))}</div>
+          </div>
+        </a>
+      </div>`;
+    } else if (m.type === 'voice') {
+      const bars = Array.from({length: 28}, () => 6 + Math.round(Math.random() * 16));
+      bubbleInner = `<div class="msg-bubble${isMine ? ' mine' : ''}" style="padding:0;background:transparent;border:none;">
+        <div class="msg-voice-card" data-voice-id="${m.id}">
+          <audio id="voiceAudio_${m.id}" src="${escHtml(m.content)}" preload="metadata" style="display:none;"></audio>
+          <button class="msg-voice-play" id="voicePlayBtn_${m.id}" onclick="toggleVoicePlay('${m.id}')">
+            <svg id="voicePlayIcon_${m.id}" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          </button>
+          <div class="msg-voice-wave" id="voiceWave_${m.id}" onclick="seekVoice(event,'${m.id}')">
+            ${bars.map((h, idx) => `<div class="msg-voice-wave-bar" data-bar="${idx}" style="height:${h}px;"></div>`).join('')}
+          </div>
+          <span class="msg-voice-time" id="voiceTime_${m.id}">${formatDuration(m.duration_seconds)}</span>
+        </div>
+      </div>`;
+    } else if (m.type === 'link') {
+      bubbleInner = `<a class="msg-link-card" href="${escHtml(m.content)}" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07l-1.41 1.41"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07l1.41-1.41"/></svg>
+        ${escHtml(m.content)}
+      </a>`;
     } else {
-      html += `<div class="msg-bubble${isMine ? ' mine' : ''}">${escHtml(m.content)}</div>`;
+      bubbleInner = `<div class="msg-bubble${isMine ? ' mine' : ''}" id="bubbleContent_${m.id}">${linkifyText(escHtml(m.content))}${m.edited_at ? '<span class="msg-bubble-edited">(modifié)</span>' : ''}</div>`;
     }
-  }
-  if (groupOpen) {
-    html += `<div class="msg-bubble-time">${new Date(msgs[msgs.length - 1]?.created_at).toLocaleTimeString('fr', { hour: '2-digit', minute: '2-digit' })}</div></div></div>`;
-  }
 
-  area.innerHTML = html || '<div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:2rem;">Aucun message. Dis bonjour ! 👋</div>';
+    // Reactions row
+    let reactionsHtml = '';
+    if (!m.is_deleted && m.reactions && Object.keys(m.reactions).length > 0) {
+      reactionsHtml = `<div class="msg-reactions">${Object.entries(m.reactions).map(([emoji, users]) => {
+        const mine = users.includes(currentUser?.username);
+        return `<div class="msg-reaction-pill${mine ? ' mine-reaction' : ''}" onclick="reactToMessage('${m.id}','${emoji}')" title="${users.map(escHtml).join(', ')}">${emoji} ${users.length}</div>`;
+      }).join('')}</div>`;
+    }
+
+    html += `<div class="msg-row" id="msgRow_${m.id}">${bubbleInner}${toolbarHtml}</div>${reactionsHtml}`;
+  }
+  closeGroup();
+
+  list.innerHTML = html || '<div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:2rem;">Aucun message. Dis bonjour ! 👋</div>';
+  const area = document.getElementById('msgMessagesArea');
   area.scrollTop = area.scrollHeight;
+}
+
+function openReactPicker(msgId, btn) {
+  document.querySelectorAll('.msg-react-picker.open').forEach(p => { if (p.id !== `reactPicker_${msgId}`) p.classList.remove('open'); });
+  document.getElementById(`reactPicker_${msgId}`)?.classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.msg-react-picker') && !e.target.closest('.msg-toolbar-btn')) {
+    document.querySelectorAll('.msg-react-picker.open').forEach(p => p.classList.remove('open'));
+  }
+});
+async function reactToMessage(msgId, emoji) {
+  if (!currentUser) return;
+  document.getElementById(`reactPicker_${msgId}`)?.classList.remove('open');
+  try {
+    await sbToggleReaction(msgId, emoji, currentUser.username);
+    await renderMessages(currentConvId);
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+}
+
+function startEditMessage(msgId) {
+  const el = document.getElementById(`bubbleContent_${msgId}`);
+  if (!el) return;
+  const original = el.textContent.replace(/\(modifié\)\s*$/, '').trim();
+  el.outerHTML = `<div class="msg-bubble mine" style="padding:0.5rem;">
+    <div class="msg-edit-box">
+      <textarea class="msg-edit-textarea" id="editBox_${msgId}" rows="1">${escHtml(original)}</textarea>
+      <div class="msg-edit-actions">
+        <button onclick="cancelEditMessage()">Annuler</button>
+        <button class="save" onclick="saveEditMessage('${msgId}')">Enregistrer</button>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById(`editBox_${msgId}`)?.focus();
+}
+function cancelEditMessage() { renderMessages(currentConvId); }
+async function saveEditMessage(msgId) {
+  const box = document.getElementById(`editBox_${msgId}`);
+  const newContent = box?.value.trim();
+  if (!newContent) { showToast('Le message ne peut pas être vide.', '#F87171'); return; }
+  try {
+    await sbEditMessage(msgId, newContent);
+    await renderMessages(currentConvId);
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+}
+async function deleteMessageConfirm(msgId, hard = false) {
+  openConfirm({
+    title: hard ? 'Supprimer définitivement ce message ?' : 'Supprimer ce message ?',
+    sub: hard ? 'Cette action est irréversible.' : 'Le message sera marqué comme supprimé pour tout le monde.',
+    yesLabel: 'Supprimer',
+    onYes: async () => {
+      try {
+        if (hard) await sbHardDeleteMessage(msgId);
+        else await sbDeleteMessage(msgId);
+        await renderMessages(currentConvId);
+        await renderConversationList();
+      } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+    }
+  });
 }
 
 async function toggleSaveGif(url, btn) {
@@ -5076,11 +6148,36 @@ async function toggleSaveGif(url, btn) {
   }
 }
 
+async function toggleSaveGifInPicker(url, btn) {
+  if (!currentUser) return;
+  savedGifsCache = savedGifsCache.filter(g => g !== url);
+  await sbUnsaveFavoriteGif(currentUser.username, url);
+  showToast('GIF retiré des favoris.', '#FCD34D');
+  loadTrendingGifs();
+}
+
 // Send message
 document.getElementById('msgSendBtn')?.addEventListener('click', sendMessage);
 document.getElementById('msgTextbox')?.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 });
+
+function isImageUrl(url){
+  return /\.(jpe?g|png|gifv?|webp|avif)(\?.*)?$/i.test(url);
+}
+async function resolveTenorGifUrl(url){
+  try {
+    const m = url.match(/-(\d+)\/?(?:[?#].*)?$/);
+    const id = m && m[1];
+    if (!id) return null;
+    const resp = await fetch(`https://tenor.googleapis.com/v2/posts?key=${TENOR_API_KEY}&ids=${id}&media_filter=gif,mediumgif,tinygif,nanogif`);
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    const formats = data?.results?.[0]?.media_formats;
+    if (!formats) return null;
+    return formats.gif?.url || formats.mediumgif?.url || formats.tinygif?.url || formats.nanogif?.url || null;
+  } catch (e) { return null; }
+}
 
 async function sendMessage() {
   if (!currentUser || !currentConvId) return;
@@ -5090,11 +6187,319 @@ async function sendMessage() {
   tb.value = '';
   tb.style.height = 'auto';
   try {
-    await sbSendMessage(currentConvId, content, 'text');
+    // Single bare URL -> detect images / Tenor GIFs / generic links
+    const isPureLink = /^(https?:\/\/|www\.)\S+$/i.test(content);
+    let type = 'text';
+    let sendContent = content;
+    if (isPureLink) {
+      const normalized = /^https?:\/\//i.test(content) ? content : 'https://' + content;
+      if (/\.gif(\?.*)?$/i.test(normalized)) {
+        type = 'gif'; sendContent = normalized;
+      } else if (isImageUrl(normalized)) {
+        type = 'image'; sendContent = normalized;
+      } else if (/(^|\.)tenor\.com$/i.test(new URL(normalized).hostname) || /tenor\.com/i.test(normalized)) {
+        const resolved = await resolveTenorGifUrl(normalized);
+        if (resolved) { type = 'gif'; sendContent = resolved; }
+        else { type = 'link'; sendContent = normalized; }
+      } else {
+        type = 'link'; sendContent = normalized;
+      }
+    }
+    await sbSendMessage(currentConvId, sendContent, type);
+    await renderMessages(currentConvId);
+    await renderConversationList();
+    notifyConversationMessage(currentConvId, content);
+  } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+}
+
+async function notifyConversationMessage(convId, content) {
+  try {
+    const conv = await sbGetConversation(convId);
+    if (!conv) return;
+    const targets = (conv.participants || []).filter(p => p !== currentUser?.username);
+    const preview = content.length > 60 ? content.slice(0, 60) + '…' : content;
+    for (const target of targets) {
+      await sbCreateNotification(target, {
+        type: 'new_message',
+        from_username: currentUser.username,
+        text: `<strong>${currentUser.display_name || currentUser.username}</strong> : ${preview}`,
+        data: { conv_id: convId }
+      });
+    }
+  } catch(e) { console.error('[notifyConversationMessage]', e); }
+}
+
+// ============================================================
+// FILE / IMAGE / VIDEO / VOICE UPLOAD
+// ============================================================
+document.getElementById('msgImportBtn')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  document.getElementById('msgImportMenu')?.classList.toggle('open');
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#msgImportBtn') && !e.target.closest('#msgImportMenu')) {
+    document.getElementById('msgImportMenu')?.classList.remove('open');
+  }
+});
+document.querySelectorAll('.msg-import-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.getElementById('msgImportMenu')?.classList.remove('open');
+    const kind = item.dataset.kind;
+    if (kind === 'image') document.getElementById('msgFileInputImage')?.click();
+    else if (kind === 'video') document.getElementById('msgFileInputVideo')?.click();
+    else if (kind === 'file') document.getElementById('msgFileInputFile')?.click();
+    else if (kind === 'folder') document.getElementById('msgFileInputFolder')?.click();
+    else if (kind === 'other') {
+      const url = prompt('Colle le lien à envoyer :');
+      if (url && currentConvId) {
+        sbSendMessage(currentConvId, url.trim(), 'link').then(() => {
+          renderMessages(currentConvId);
+          renderConversationList();
+        }).catch(e2 => showToast('Erreur: ' + e2.message, '#F87171'));
+      }
+    }
+  });
+});
+['msgFileInputImage', 'msgFileInputVideo', 'msgFileInputFile'].forEach(id => {
+  document.getElementById(id)?.addEventListener('change', async function () {
+    for (const file of this.files) { await sendFileMessage(file); }
+    this.value = '';
+  });
+});
+document.getElementById('msgFileInputFolder')?.addEventListener('change', async function () {
+  for (const file of this.files) { await sendFileMessage(file); }
+  this.value = '';
+});
+
+async function sendFileMessage(file) {
+  if (!currentUser || !currentConvId) return;
+  if (file.size > 25 * 1024 * 1024) { showToast('Fichier trop volumineux (25 Mo max).', '#F87171'); return; }
+  showToast('📤 Envoi en cours...', '#7C3AED');
+  try {
+    const url = await sbUploadMessageFile(currentConvId, file);
+    let type = 'file';
+    if (file.type.startsWith('image/')) type = file.name.toLowerCase().endsWith('.gif') ? 'gif' : 'image';
+    await sbSendMessage(currentConvId, url, type, {
+      file_name: file.name, file_size: file.size, file_mime: file.type
+    });
     await renderMessages(currentConvId);
     await renderConversationList();
   } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
 }
+
+// Drag & drop import
+const msgMessagesAreaEl = document.getElementById('msgMessagesArea');
+const msgDropOverlay = document.getElementById('msgDropOverlay');
+let dragCounter = 0;
+['dragenter', 'dragover'].forEach(evt => {
+  msgMessagesAreaEl?.addEventListener(evt, (e) => {
+    e.preventDefault(); e.stopPropagation();
+    if (!currentConvId) return;
+    dragCounter++;
+    msgDropOverlay?.classList.add('active');
+  });
+});
+['dragleave', 'dragend'].forEach(evt => {
+  msgMessagesAreaEl?.addEventListener(evt, (e) => {
+    e.preventDefault(); e.stopPropagation();
+    dragCounter = Math.max(0, dragCounter - 1);
+    if (dragCounter === 0) msgDropOverlay?.classList.remove('active');
+  });
+});
+msgMessagesAreaEl?.addEventListener('drop', async (e) => {
+  e.preventDefault(); e.stopPropagation();
+  dragCounter = 0;
+  msgDropOverlay?.classList.remove('active');
+  if (!currentConvId) return;
+  const files = Array.from(e.dataTransfer?.files || []);
+  for (const file of files) { await sendFileMessage(file); }
+});
+
+// ============================================================
+// VOICE MESSAGES
+// ============================================================
+// CUSTOM VOICE PLAYER (controls the hidden <audio>, animates the waveform bars)
+function toggleVoicePlay(id) {
+  const audio = document.getElementById('voiceAudio_' + id);
+  const icon = document.getElementById('voicePlayIcon_' + id);
+  if (!audio) return;
+  // Pause any other voice message currently playing
+  document.querySelectorAll('audio[id^="voiceAudio_"]').forEach(a => {
+    if (a !== audio && !a.paused) {
+      a.pause();
+      const otherId = a.id.replace('voiceAudio_', '');
+      const otherIcon = document.getElementById('voicePlayIcon_' + otherId);
+      if (otherIcon) otherIcon.innerHTML = '<polygon points="6 4 20 12 6 20 6 4"/>';
+    }
+  });
+  if (audio.paused) {
+    audio.play();
+    if (icon) icon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  } else {
+    audio.pause();
+    if (icon) icon.innerHTML = '<polygon points="6 4 20 12 6 20 6 4"/>';
+  }
+  audio.ontimeupdate = () => updateVoiceWave(id);
+  audio.onended = () => {
+    if (icon) icon.innerHTML = '<polygon points="6 4 20 12 6 20 6 4"/>';
+    updateVoiceWave(id, true);
+  };
+}
+function updateVoiceWave(id, reset) {
+  const audio = document.getElementById('voiceAudio_' + id);
+  const wave = document.getElementById('voiceWave_' + id);
+  const timeEl = document.getElementById('voiceTime_' + id);
+  if (!audio || !wave) return;
+  const progress = reset ? 0 : (audio.duration ? audio.currentTime / audio.duration : 0);
+  const bars = wave.querySelectorAll('.msg-voice-wave-bar');
+  const activeCount = Math.round(progress * bars.length);
+  bars.forEach((b, i) => b.classList.toggle('played', i < activeCount));
+  if (timeEl) timeEl.textContent = formatDuration(reset ? audio.duration : (audio.currentTime || audio.duration));
+}
+function seekVoice(e, id) {
+  const audio = document.getElementById('voiceAudio_' + id);
+  const wave = document.getElementById('voiceWave_' + id);
+  if (!audio || !wave || !audio.duration) return;
+  const rect = wave.getBoundingClientRect();
+  const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+  audio.currentTime = ratio * audio.duration;
+  updateVoiceWave(id);
+}
+let mediaRecorder = null;
+let recordedChunks = [];
+let recordingStart = 0;
+let recordingTimer = null;
+
+document.getElementById('msgVoiceBtn')?.addEventListener('click', async () => {
+  if (!currentUser || !currentConvId) return;
+  if (!navigator.mediaDevices?.getUserMedia) { showToast('Micro non supporté par ce navigateur.', '#F87171'); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.start();
+    recordingStart = Date.now();
+    document.getElementById('msgRecordingBar')?.classList.add('active');
+    recordingTimer = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - recordingStart) / 1000);
+      const el = document.getElementById('msgRecTime');
+      if (el) el.textContent = formatDuration(elapsed);
+    }, 250);
+  } catch (e) { showToast('Accès au micro refusé.', '#F87171'); }
+});
+
+function stopRecordingStream() {
+  mediaRecorder?.stream?.getTracks().forEach(t => t.stop());
+  clearInterval(recordingTimer);
+  document.getElementById('msgRecordingBar')?.classList.remove('active');
+}
+
+document.getElementById('msgRecCancelBtn')?.addEventListener('click', () => {
+  if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+  stopRecordingStream();
+  recordedChunks = [];
+});
+
+document.getElementById('msgRecSendBtn')?.addEventListener('click', () => {
+  if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+  const duration = Math.round((Date.now() - recordingStart) / 1000);
+  mediaRecorder.onstop = async () => {
+    stopRecordingStream();
+    const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+    if (blob.size === 0) return;
+    const file = new File([blob], `vocal_${Date.now()}.webm`, { type: 'audio/webm' });
+    showToast('📤 Envoi du message vocal...', '#7C3AED');
+    try {
+      const url = await sbUploadMessageFile(currentConvId, file);
+      await sbSendMessage(currentConvId, url, 'voice', {
+        file_name: file.name, file_size: file.size, file_mime: file.type, duration_seconds: duration
+      });
+      await renderMessages(currentConvId);
+      await renderConversationList();
+    } catch (e) { showToast('Erreur: ' + e.message, '#F87171'); }
+  };
+  mediaRecorder.stop();
+});
+
+// ============================================================
+// CUSTOM MEDIA LIGHTBOX (images & videos — own player, no native UI quirks)
+// ============================================================
+function openMediaLightbox(type, url, name) {
+  const lb = document.getElementById('msgLightbox');
+  const stage = document.getElementById('msgLightboxStage');
+  const controls = document.getElementById('msgLightboxControls');
+  stage.innerHTML = '';
+  controls.innerHTML = '';
+  controls.style.display = 'none';
+
+  if (type === 'image') {
+    stage.innerHTML = `<img src="${escHtml(url)}" alt="${escHtml(name || 'image')}">`;
+    controls.style.display = 'flex';
+    controls.innerHTML = `
+      <a href="${escHtml(url)}" download="${escHtml(name || 'image')}" target="_blank" title="Télécharger">
+        <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+      </a>`;
+  } else if (type === 'video') {
+    stage.innerHTML = `<video id="lbVideo" src="${escHtml(url)}" autoplay playsinline></video>`;
+    controls.style.display = 'flex';
+    controls.innerHTML = `
+      <button id="lbPlayBtn" title="Lecture/Pause"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg></button>
+      <div class="msg-lightbox-progress">
+        <span class="msg-lightbox-time" id="lbCurTime">0:00</span>
+        <input type="range" id="lbSeek" min="0" max="100" value="0" step="0.1">
+        <span class="msg-lightbox-time" id="lbDurTime">0:00</span>
+      </div>
+      <button id="lbMuteBtn" title="Couper le son"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></button>
+      <input type="range" class="msg-lightbox-volume" id="lbVolume" min="0" max="1" value="1" step="0.01">
+      <a href="${escHtml(url)}" download="${escHtml(name || 'video.mp4')}" target="_blank" title="Télécharger">
+        <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+      </a>`;
+
+    const video = document.getElementById('lbVideo');
+    const playBtn = document.getElementById('lbPlayBtn');
+    const muteBtn = document.getElementById('lbMuteBtn');
+    const volume = document.getElementById('lbVolume');
+    const seek = document.getElementById('lbSeek');
+    const curTime = document.getElementById('lbCurTime');
+    const durTime = document.getElementById('lbDurTime');
+
+    playBtn.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
+    video.addEventListener('click', () => { video.paused ? video.play() : video.pause(); });
+    video.addEventListener('play', () => { playBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'; });
+    video.addEventListener('pause', () => { playBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>'; });
+    video.addEventListener('loadedmetadata', () => { durTime.textContent = formatDuration(video.duration); });
+    video.addEventListener('timeupdate', () => {
+      if (video.duration) seek.value = (video.currentTime / video.duration) * 100;
+      curTime.textContent = formatDuration(video.currentTime);
+    });
+    seek.addEventListener('input', () => { if (video.duration) video.currentTime = (seek.value / 100) * video.duration; });
+    muteBtn.addEventListener('click', () => {
+      video.muted = !video.muted;
+      muteBtn.style.color = video.muted ? '#F87171' : '';
+    });
+    volume.addEventListener('input', () => { video.volume = volume.value; if (video.volume > 0) video.muted = false; });
+  }
+
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMediaLightbox() {
+  const lb = document.getElementById('msgLightbox');
+  const stage = document.getElementById('msgLightboxStage');
+  const v = document.getElementById('lbVideo');
+  if (v) { v.pause(); }
+  stage.innerHTML = '';
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('msgLightboxClose')?.addEventListener('click', closeMediaLightbox);
+document.getElementById('msgLightbox')?.addEventListener('click', (e) => {
+  if (e.target.id === 'msgLightbox') closeMediaLightbox();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMediaLightbox();
+});
 
 // Auto-resize textbox
 document.getElementById('msgTextbox')?.addEventListener('input', function () {
@@ -5108,17 +6513,28 @@ document.getElementById('msgChatLeaveBtn')?.addEventListener('click', async () =
   const conv = await sbGetConversation(currentConvId);
   if (!conv) return;
   const isGroup = !!conv.group_name;
+  const finishLeave = async () => {
+    currentConvId = null;
+    clearInterval(msgPollingInterval);
+    document.getElementById('msgChatArea').style.display = 'none';
+    document.getElementById('msgMainEmpty').style.display = 'flex';
+    document.getElementById('groupMembersPanel').classList.remove('open');
+    await renderConversationList();
+  };
   if (isGroup) {
-    if (!confirm('Quitter ce groupe ?')) return;
-    await sbLeaveConversation(currentConvId, currentUser.username);
-    showToast('Tu as quitté le groupe.', '#FCD34D');
+    openConfirm({
+      title: 'Quitter ce groupe ?',
+      sub: 'Tu ne recevras plus les messages de ce groupe.',
+      yesLabel: 'Quitter',
+      onYes: async () => {
+        await sbLeaveConversation(currentConvId, currentUser.username);
+        showToast('Tu as quitté le groupe.', '#FCD34D');
+        await finishLeave();
+      }
+    });
+  } else {
+    await finishLeave();
   }
-  currentConvId = null;
-  clearInterval(msgPollingInterval);
-  document.getElementById('msgChatArea').style.display = 'none';
-  document.getElementById('msgMainEmpty').style.display = 'flex';
-  document.getElementById('groupMembersPanel').classList.remove('open');
-  await renderConversationList();
 });
 
 // Group members
@@ -5209,21 +6625,21 @@ document.getElementById('msgGifBtn')?.addEventListener('click', (e) => {
 async function loadTrendingGifs() {
   const grid = document.getElementById('gifGrid');
   if (!grid) return;
-  grid.innerHTML = '<div class="gif-loading">Chargement...</div>';
+  grid.innerHTML = `<div class="gif-loading">${t('gifLoading')}</div>`;
   // Show saved GIFs first
   let savedHtml = '';
   if (currentUser && savedGifsCache.length > 0) {
-    savedHtml = `<div class="gif-saved-label" style="grid-column:1/-1;">⭐ Mes GIFs sauvegardés</div>`;
+    savedHtml = `<div class="gif-saved-label" style="grid-column:1/-1;">${t('gifMySaved')}</div>`;
     savedHtml += savedGifsCache.slice(0, 4).map(url =>
-      `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
+      `<div class="gif-item gif-item-saved"><img src="${escHtml(url)}" loading="lazy" onclick="sendGif('${escHtml(url)}')"><button class="msg-gif-save-btn saved" style="opacity:1;" onclick="event.stopPropagation();toggleSaveGifInPicker('${escHtml(url)}', this)" title="Retirer des favoris"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2.5 15.09 8.76 22 9.77 17 14.64 18.18 21.52 12 18.27 5.82 21.52 7 14.64 2 9.77 8.91 8.76 12 2.5"/></svg></button></div>`
     ).join('');
-    savedHtml += `<div class="gif-saved-label" style="grid-column:1/-1;">🔥 Tendances</div>`;
+    savedHtml += `<div class="gif-saved-label" style="grid-column:1/-1;">${t('gifTrending')}</div>`;
   }
   try {
     const resp = await fetch(`https://tenor.googleapis.com/v2/featured?key=${TENOR_API_KEY}&limit=12&media_filter=gif&contentfilter=medium`);
     const data = await resp.json();
     const gifs = (data.results || []).map(r => r.media_formats?.gif?.url || r.media_formats?.tinygif?.url).filter(Boolean);
-    if (gifs.length === 0) { grid.innerHTML = savedHtml + '<div class="gif-loading">Aucun GIF trouvé</div>'; return; }
+    if (gifs.length === 0) { grid.innerHTML = savedHtml + `<div class="gif-loading">${t('gifNoneFound')}</div>`; return; }
     grid.innerHTML = savedHtml + gifs.map(url =>
       `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
     ).join('');
@@ -5250,17 +6666,17 @@ document.getElementById('gifSearchInput')?.addEventListener('input', function ()
   gifSearchDebounce = setTimeout(async () => {
     const grid = document.getElementById('gifGrid');
     if (!grid) return;
-    grid.innerHTML = '<div class="gif-loading">Recherche...</div>';
+    grid.innerHTML = `<div class="gif-loading">${t('gifSearching')}</div>`;
     try {
       const resp = await fetch(`https://tenor.googleapis.com/v2/search?key=${TENOR_API_KEY}&q=${encodeURIComponent(q)}&limit=12&media_filter=gif&contentfilter=medium`);
       const data = await resp.json();
       const gifs = (data.results || []).map(r => r.media_formats?.gif?.url || r.media_formats?.tinygif?.url).filter(Boolean);
-      if (gifs.length === 0) { grid.innerHTML = '<div class="gif-loading">Aucun GIF trouvé</div>'; return; }
+      if (gifs.length === 0) { grid.innerHTML = `<div class="gif-loading">${t('gifNoneFound')}</div>`; return; }
       grid.innerHTML = gifs.map(url =>
         `<div class="gif-item" onclick="sendGif('${escHtml(url)}')"><img src="${escHtml(url)}" loading="lazy"></div>`
       ).join('');
     } catch (e) {
-      grid.innerHTML = '<div class="gif-loading">Erreur de recherche.</div>';
+      grid.innerHTML = `<div class="gif-loading">${t('gifSearchError')}</div>`;
     }
   }, 400);
 });
@@ -5487,13 +6903,21 @@ async function updateMsgBadge() {
 }
 
 // Patch the init / updateAuthUI to show social buttons
+let notifPollingInterval = null;
 function updateSocialZone() {
   const zone = document.getElementById('navSocialZone');
   if (zone) zone.style.display = currentUser ? 'flex' : 'none';
   if (currentUser) {
+    if (window.Notification && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
     loadAndRenderNotifications();
     updateMsgBadge();
     renderFriendsPanel();
+    clearInterval(notifPollingInterval);
+    notifPollingInterval = setInterval(() => { loadAndRenderNotifications(); updateMsgBadge(); }, 8000);
+  } else {
+    clearInterval(notifPollingInterval);
   }
 }
 
